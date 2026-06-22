@@ -1,0 +1,1 @@
+# pulsechain-launch-scanner
