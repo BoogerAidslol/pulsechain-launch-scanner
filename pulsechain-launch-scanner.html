@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PulseChain Launch Scanner</title>
+<style>
+:root{--pulse:#9D4EDD;--pulse-dim:#7B2FBE;--green:#22C55E;--red:#EF4444;--amber:#F59E0B;--blue:#3B82F6;--bg:#0A0A0F;--bg2:#111118;--bg3:#18181F;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F1F0FF;--muted:#6B6880;--sub:#9592A8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:60px;}
+header{border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(10,10,15,0.97);z-index:10;}
+.logo{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;}
+.logo-icon{width:27px;height:27px;background:linear-gradient(135deg,#9D4EDD,#6B21A8);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;}
+.hright{display:flex;align-items:center;gap:10px;}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-family:'Courier New',monospace;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.btn-refresh{background:var(--bg2);border:1px solid var(--border2);color:var(--sub);border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;font-family:inherit;}
+.btn-refresh:hover{border-color:var(--pulse);color:var(--text);}
+
+/* Filters */
+.filters{max-width:1100px;margin:20px auto 0;padding:0 20px;}
+.filter-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;}
+.filter-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-right:4px;}
+.fbtn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.fbtn:hover{border-color:var(--border2);color:var(--sub);}
+.fbtn.active{background:rgba(157,78,221,0.1);border-color:var(--pulse);color:var(--pulse);}
+.fbtn.green.active{background:rgba(34,197,94,0.1);border-color:var(--green);color:var(--green);}
+.fbtn.amber.active{background:rgba(245,158,11,0.1);border-color:var(--amber);color:var(--amber);}
+.fbtn.red.active{background:rgba(239,68,68,0.1);border-color:var(--red);color:var(--red);}
+.search-input{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 12px;font-size:12px;font-family:inherit;outline:none;width:180px;}
+.search-input:focus{border-color:var(--pulse);}
+.search-input::placeholder{color:var(--muted);}
+
+/* Stats bar */
+.stats-bar{max-width:1100px;margin:0 auto 16px;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px;}
+.stat-val{font-size:18px;font-weight:700;font-family:'Courier New',monospace;}
+.stat-val.green{color:var(--green);}.stat-val.amber{color:var(--amber);}.stat-val.red{color:var(--red);}.stat-val.pulse{color:var(--pulse);}
+
+/* Token grid */
+main{max-width:1100px;margin:0 auto;padding:0 20px;}
+.section-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.token-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;margin-bottom:24px;}
+
+/* Token card */
+.tok-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color 0.2s;}
+.tok-card:hover{border-color:var(--border2);}
+.tok-card.graduated{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.03);}
+.tok-card.hot{border-color:rgba(239,68,68,0.25);background:rgba(239,68,68,0.03);}
+.tok-card.new{border-color:rgba(59,130,246,0.25);background:rgba(59,130,246,0.03);}
+
+.tok-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.tok-icon{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sub);flex-shrink:0;overflow:hidden;}
+.tok-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.tok-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tok-sym{font-size:11px;color:var(--muted);font-family:'Courier New',monospace;}
+.tok-badges{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto;flex-shrink:0;}
+.badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;}
+.badge.green{background:rgba(34,197,94,0.12);color:var(--green);}
+.badge.red{background:rgba(239,68,68,0.12);color:var(--red);}
+.badge.amber{background:rgba(245,158,11,0.12);color:var(--amber);}
+.badge.blue{background:rgba(59,130,246,0.12);color:var(--blue);}
+.badge.pulse{background:rgba(157,78,221,0.12);color:var(--pulse);}
+
+.tok-price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.tok-price{font-size:16px;font-weight:700;font-family:'Courier New',monospace;}
+.tok-change{font-size:12px;font-weight:600;font-family:'Courier New',monospace;padding:2px 7px;border-radius:4px;}
+.tok-change.up{background:rgba(34,197,94,0.1);color:var(--green);}
+.tok-change.down{background:rgba(239,68,68,0.1);color:var(--red);}
+
+.tok-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
+.ts-item{}
+.ts-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px;}
+.ts-val{font-size:12px;font-weight:500;font-family:'Courier New',monospace;}
+
+/* Graduation bar */
+.grad-bar-wrap{margin-bottom:8px;}
+.grad-bar-top{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;}
+.grad-bar-bg{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.grad-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--pulse),var(--green));}
+
+/* Momentum */
+.momentum{display:flex;align-items:center;gap:4px;margin-bottom:8px;}
+.mom-label{font-size:10px;color:var(--muted);margin-right:4px;}
+.mom-fire{font-size:13px;}
+
+/* Whale alert */
+.whale-row{background:rgba(157,78,221,0.06);border:1px solid rgba(157,78,221,0.15);border-radius:6px;padding:6px 10px;font-size:11px;color:var(--sub);display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.whale-icon{font-size:13px;}
+
+/* Footer links */
+.tok-links{display:flex;gap:8px;}
+.tok-link{font-size:11px;color:var(--pulse);text-decoration:none;opacity:0.7;}
+.tok-link:hover{opacity:1;}
+
+/* State */
+.state{text-align:center;padding:60px 20px;color:var(--muted);}
+.state-icon{font-size:36px;margin-bottom:12px;}
+.state-title{font-size:15px;font-weight:500;color:var(--sub);margin-bottom:6px;}
+.spinner{width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--pulse);border-radius:50%;animation:spin 0.75s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* New token flash */
+@keyframes flashIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+.flash{animation:flashIn 0.3s ease;}
+
+footer{text-align:center;margin-top:44px;font-size:11px;color:var(--muted);line-height:1.8;}
+@media(max-width:600px){.token-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><div class="logo-icon">🚀</div> PulseChain Launch Scanner</div>
+  <div class="hright">
+    <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+    <button class="btn-refresh" onclick="loadAll()">↻ Refresh</button>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="filter-row">
+    <span class="filter-label">Age:</span>
+    <button class="fbtn active" onclick="setFilter('age','all',this)">All</button>
+    <button class="fbtn" onclick="setFilter('age','1h',this)">1H</button>
+    <button class="fbtn" onclick="setFilter('age','6h',this)">6H</button>
+    <button class="fbtn" onclick="setFilter('age','24h',this)">24H</button>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Type:</span>
+    <button class="fbtn active" onclick="setFilter('type','all',this)">All</button>
+    <button class="fbtn green" onclick="setFilter('type','graduated',this)">🎓 Graduated</button>
+    <button class="fbtn amber" onclick="setFilter('type','hot',this)">🔥 Hot</button>
+    <button class="fbtn blue" onclick="setFilter('type','new',this)">🆕 New</button>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Sort:</span>
+    <button class="fbtn active" onclick="setSort('volume',this)">Volume</button>
+    <button class="fbtn" onclick="setSort('age',this)">Newest</button>
+    <button class="fbtn" onclick="setSort('change',this)">% Change</button>
+    <button class="fbtn" onclick="setSort('mcap',this)">Mkt Cap</button>
+    <button class="fbtn" onclick="setSort('grad',this)">Grad %</button>
+    <input class="search-input" type="text" placeholder="Search name / symbol..." oninput="doSearch(this.value)" id="search-box"/>
+  </div>
+</div>
+
+<div class="stats-bar" id="stats-bar">
+  <div class="stat-card"><div class="stat-label">New Today</div><div class="stat-val pulse" id="stat-new">—</div></div>
+  <div class="stat-card"><div class="stat-label">Graduated</div><div class="stat-val green" id="stat-grad">—</div></div>
+  <div class="stat-card"><div class="stat-label">🔥 Hot</div><div class="stat-val red" id="stat-hot">—</div></div>
+  <div class="stat-card"><div class="stat-label">Total Volume</div><div class="stat-val" id="stat-vol">—</div></div>
+  <div class="stat-card"><div class="stat-label">Last Updated</div><div class="stat-val" id="stat-time" style="font-size:13px;">—</div></div>
+</div>
+
+<main>
+  <div id="grad-section" style="display:none;">
+    <div class="section-title">🎓 Recently Graduated to PulseX</div>
+    <div class="token-grid" id="grad-grid"></div>
+  </div>
+  <div id="hot-section" style="display:none;">
+    <div class="section-title">🔥 Hot Right Now</div>
+    <div class="token-grid" id="hot-grid"></div>
+  </div>
+  <div id="new-section" style="display:none;">
+    <div class="section-title">🆕 New Launches</div>
+    <div class="token-grid" id="new-grid"></div>
+  </div>
+  <div id="all-section">
+    <div class="section-title">All Tokens</div>
+    <div class="token-grid" id="all-grid">
+      <div class="state" style="grid-column:1/-1;">
+        <div class="spinner"></div>
+        <div class="state-title">Scanning PulseChain...</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  PulseChain Launch Scanner · Data via DexScreener · PulseChain RPC · Blockscout<br>
+  Not financial advice · Always DYOR · pump.tires tokens carry extreme risk
+</footer>
+
+<script>
+var DEXSCR = 'https://api.dexscreener.com';
+var RPC = 'https://rpc.pulsechain.com';
+var BSCOUT = 'https://api.scan.pulsechain.com/api/v2';
+
+// pump.tires factory contract on PulseChain
+var PUMP_FACTORY = '0x4b576a0b79B12F7A45f88D15a58e9E2C359F81C5';
+// PulseX V1 factory
+var PULSEX_V1_FACTORY = '0x1715a3E4A142d8b698131108995174F37aEBA10D';
+// PulseX V2 factory  
+var PULSEX_V2_FACTORY = '0x29eA7545DEfA1b5eb89e2b978BF4Aed6D6BeF5E3';
+
+var allTokens = [];
+var filters = {age:'all', type:'all'};
+var sortBy = 'volume';
+var searchTerm = '';
+var autoRefresh = null;
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function fmt(v) {
+  if (!v||isNaN(v)) return '$0';
+  if (v>=1e9) return '$'+(v/1e9).toFixed(2)+'B';
+  if (v>=1e6) return '$'+(v/1e6).toFixed(2)+'M';
+  if (v>=1000) return '$'+(v/1000).toFixed(2)+'K';
+  if (v>=1) return '$'+v.toFixed(2);
+  if (v>=0.0001) return '$'+v.toFixed(6);
+  return '$'+v.toExponential(2);
+}
+function fmtNum(v) {
+  if (!v||isNaN(v)) return '0';
+  if (v>=1e9) return (v/1e9).toFixed(2)+'B';
+  if (v>=1e6) return (v/1e6).toFixed(2)+'M';
+  if (v>=1000) return (v/1000).toFixed(2)+'K';
+  return v.toFixed(0);
+}
+function timeAgo(ts) {
+  var s = Math.floor(Date.now()/1000 - ts/1000);
+  if (s<60) return s+'s ago';
+  if (s<3600) return Math.floor(s/60)+'m ago';
+  if (s<86400) return Math.floor(s/3600)+'h ago';
+  return Math.floor(s/86400)+'d ago';
+}
+function shortAddr(a) { return a?a.slice(0,6)+'...'+a.slice(-4):''; }
+
+// ── Momentum score ──────────────────────────────────────────────────────────
+function getMomentum(tok) {
+  var score = 0;
+  var ch24 = parseFloat(tok.priceChange&&tok.priceChange.h24||0);
+  var ch1  = parseFloat(tok.priceChange&&tok.priceChange.h1||0);
+  var vol  = parseFloat(tok.volume&&tok.volume.h24||0);
+  var liq  = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  var txns = (tok.txns&&tok.txns.h24) ? (tok.txns.h24.buys||0)+(tok.txns.h24.sells||0) : 0;
+
+  if (ch24 > 100) score += 3;
+  else if (ch24 > 50) score += 2;
+  else if (ch24 > 20) score += 1;
+
+  if (ch1 > 20) score += 2;
+  else if (ch1 > 10) score += 1;
+
+  if (vol > 100000) score += 2;
+  else if (vol > 10000) score += 1;
+
+  if (txns > 500) score += 2;
+  else if (txns > 100) score += 1;
+
+  // Buy/sell ratio
+  if (tok.txns&&tok.txns.h24) {
+    var buys = tok.txns.h24.buys||0;
+    var sells = tok.txns.h24.sells||0;
+    if (buys > sells*2) score += 2;
+    else if (buys > sells) score += 1;
+  }
+
+  return Math.min(score, 8);
+}
+
+function momentumHtml(score) {
+  var fires = '';
+  if (score >= 7) fires = '🔥🔥🔥 Insane';
+  else if (score >= 5) fires = '🔥🔥 Hot';
+  else if (score >= 3) fires = '🔥 Warm';
+  else fires = '❄️ Cold';
+  return '<div class="momentum"><span class="mom-label">Momentum:</span><span>'+fires+'</span></div>';
+}
+
+// ── Rug indicators ──────────────────────────────────────────────────────────
+function rugIndicators(tok) {
+  var flags = [];
+  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  var vol = parseFloat(tok.volume&&tok.volume.h24||0);
+  var mc  = parseFloat(tok.marketCap||0);
+
+  if (liq < 1000) flags.push({label:'Low Liq', cls:'red'});
+  else if (liq < 10000) flags.push({label:'Med Liq', cls:'amber'});
+  else flags.push({label:'Good Liq', cls:'green'});
+
+  if (mc > 0 && liq > 0) {
+    var ratio = liq/mc;
+    if (ratio < 0.01) flags.push({label:'⚠ Liq/MC Low', cls:'red'});
+  }
+
+  if (tok.txns&&tok.txns.h24) {
+    var buys = tok.txns.h24.buys||0;
+    var sells = tok.txns.h24.sells||0;
+    if (sells > buys*3) flags.push({label:'⚠ Sell Pressure', cls:'red'});
+    else if (buys > sells*2) flags.push({label:'Buy Pressure', cls:'green'});
+  }
+
+  return flags;
+}
+
+// ── Graduation progress ─────────────────────────────────────────────────────
+// pump.tires graduates at 200M PLS ~ roughly $2200 USD at current prices
+function gradProgress(tok) {
+  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  // Rough estimate: graduation at ~$2200 USD liquidity for pump.tires
+  var target = 2200;
+  var pct = Math.min((liq/target)*100, 100);
+  return pct;
+}
+
+// ── Whale detection ─────────────────────────────────────────────────────────
+function whaleHtml(tok) {
+  // Check for large single transactions relative to market cap
+  var vol1h = parseFloat(tok.volume&&tok.volume.h1||0);
+  var txns1h = (tok.txns&&tok.txns.h1) ? (tok.txns.h1.buys||0) : 1;
+  var avgTx = txns1h > 0 ? vol1h/txns1h : 0;
+  var mc = parseFloat(tok.marketCap||0);
+
+  if (avgTx > 5000) {
+    return '<div class="whale-row"><span class="whale-icon">🐋</span><span>Large avg tx: '+fmt(avgTx)+' — whale activity detected</span></div>';
+  }
+  if (mc > 0 && vol1h > mc*0.1) {
+    return '<div class="whale-row"><span class="whale-icon">🐋</span><span>Volume >10% of market cap in 1h</span></div>';
+  }
+  return '';
+}
+
+// ── Is pump.tires token ─────────────────────────────────────────────────────
+function isPumpTires(tok) {
+  // pump.tires tokens have WPLS as quote token and very small initial liquidity
+  var qa = (tok.quoteToken&&tok.quoteToken.address||'').toLowerCase();
+  var wpls = '0xa1077a294dde1b09bb078844df40758a5d0f9a27';
+  return qa === wpls;
+}
+
+function isGraduated(tok) {
+  // Graduated tokens have higher liquidity (>$2000) and were recently added to PulseX
+  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  var age = tok.pairCreatedAt ? (Date.now() - tok.pairCreatedAt)/3600000 : 999;
+  return liq > 1500 && age < 72 && isPumpTires(tok);
+}
+
+// ── Render token card ───────────────────────────────────────────────────────
+function renderCard(tok) {
+  var base = tok.baseToken||{};
+  var sym = base.symbol||'???';
+  var name = base.name||sym;
+  var price = parseFloat(tok.priceUsd||0);
+  var ch24 = parseFloat(tok.priceChange&&tok.priceChange.h24||0);
+  var ch1  = parseFloat(tok.priceChange&&tok.priceChange.h1||0);
+  var vol24 = parseFloat(tok.volume&&tok.volume.h24||0);
+  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  var mc = parseFloat(tok.marketCap||0);
+  var buys = (tok.txns&&tok.txns.h24&&tok.txns.h24.buys)||0;
+  var sells = (tok.txns&&tok.txns.h24&&tok.txns.h24.sells)||0;
+  var age = tok.pairCreatedAt ? timeAgo(tok.pairCreatedAt) : '?';
+  var momentum = getMomentum(tok);
+  var rugFlags = rugIndicators(tok);
+  var graduated = isGraduated(tok);
+  var cardCls = graduated ? 'graduated' : momentum >= 6 ? 'hot' : '';
+  var pumpTires = isPumpTires(tok);
+  var gradPct = pumpTires ? gradProgress(tok) : -1;
+
+  // Logo
+  var logoHtml = tok.info&&tok.info.imageUrl
+    ? '<img src="'+tok.info.imageUrl+'" alt="'+sym+'" onerror="this.parentElement.textContent=\''+sym.slice(0,3)+'\'">'
+    : sym.slice(0,3);
+
+  // Badges
+  var badges = '';
+  if (graduated) badges += '<span class="badge green">🎓 Grad</span>';
+  if (pumpTires) badges += '<span class="badge pulse">pump.tires</span>';
+  if (momentum >= 6) badges += '<span class="badge red">🔥 Hot</span>';
+  if (age.includes('m ago') || age.includes('s ago')) badges += '<span class="badge blue">🆕 New</span>';
+
+  // Graduation bar (pump.tires only, not yet graduated)
+  var gradBar = '';
+  if (pumpTires && !graduated && gradPct >= 0) {
+    var barColor = gradPct > 80 ? 'var(--green)' : gradPct > 50 ? 'var(--amber)' : 'var(--pulse)';
+    gradBar = '<div class="grad-bar-wrap"><div class="grad-bar-top"><span>Graduation Progress</span><span>'+gradPct.toFixed(1)+'%</span></div><div class="grad-bar-bg"><div class="grad-bar-fill" style="width:'+gradPct+'%;background:'+barColor+';"></div></div></div>';
+  }
+  if (graduated) {
+    gradBar = '<div class="grad-bar-wrap"><div class="grad-bar-top"><span style="color:var(--green)">✅ Graduated to PulseX!</span></div></div>';
+  }
+
+  var html = '<div class="tok-card '+cardCls+' flash">';
+  html += '<div class="tok-header"><div class="tok-icon">'+logoHtml+'</div><div style="min-width:0;flex:1"><div class="tok-name">'+name+'</div><div class="tok-sym">$'+sym+' · '+age+'</div></div><div class="tok-badges">'+badges+'</div></div>';
+  html += '<div class="tok-price-row"><div class="tok-price">'+fmt(price)+'</div><div class="tok-change '+(ch24>=0?'up':'down')+'">'+(ch24>=0?'+':'')+ch24.toFixed(1)+'% 24h</div></div>';
+  html += '<div class="tok-stats">';
+  html += '<div class="ts-item"><div class="ts-label">Volume 24h</div><div class="ts-val">'+fmt(vol24)+'</div></div>';
+  html += '<div class="ts-item"><div class="ts-label">Liquidity</div><div class="ts-val">'+fmt(liq)+'</div></div>';
+  html += '<div class="ts-item"><div class="ts-label">Mkt Cap</div><div class="ts-val">'+(mc>0?fmt(mc):'—')+'</div></div>';
+  html += '<div class="ts-item"><div class="ts-label">Buys 24h</div><div class="ts-val" style="color:var(--green)">'+buys+'</div></div>';
+  html += '<div class="ts-item"><div class="ts-label">Sells 24h</div><div class="ts-val" style="color:var(--red)">'+sells+'</div></div>';
+  html += '<div class="ts-item"><div class="ts-label">1h Change</div><div class="ts-val '+(ch1>=0?'':'')+'">'+( ch1>=0?'+':'')+ch1.toFixed(1)+'%</div></div>';
+  html += '</div>';
+  html += gradBar;
+  html += momentumHtml(momentum);
+  html += whaleHtml(tok);
+  html += '<div class="tok-badges" style="margin-bottom:8px;">';
+  rugFlags.forEach(function(f){ html += '<span class="badge '+f.cls+'">'+f.label+'</span>'; });
+  html += '</div>';
+  html += '<div class="tok-links">';
+  html += '<a class="tok-link" href="https://dexscreener.com/pulsechain/'+tok.pairAddress+'" target="_blank">DexScreener ↗</a>';
+  html += '<a class="tok-link" href="https://scan.pulsechain.com/token/'+base.address+'" target="_blank">PulseScan ↗</a>';
+  if (pumpTires) html += '<a class="tok-link" href="https://pump.tires" target="_blank">pump.tires ↗</a>';
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+// ── Fetch data ──────────────────────────────────────────────────────────────
+async function fetchNewPairs() {
+  var tokens = [];
+  try {
+    // Get latest PulseChain tokens from DexScreener search
+    var r = await fetch(DEXSCR+'/token-profiles/latest/v1?chainId=pulsechain');
+    if (r.ok) {
+      var j = await r.json();
+      var addrs = (j||[]).slice(0,30).map(function(t){return t.tokenAddress;}).filter(Boolean);
+      if (addrs.length) {
+        var r2 = await fetch(DEXSCR+'/tokens/v1/pulsechain/'+addrs.join(','));
+        if (r2.ok) {
+          var j2 = await r2.json();
+          (j2||[]).forEach(function(tok){
+            if (tok.pairs&&tok.pairs.length) tokens.push(tok.pairs[0]);
+          });
+        }
+      }
+    }
+  } catch(e) {}
+  return tokens;
+}
+
+async function fetchTrendingPairs() {
+  var tokens = [];
+  try {
+    var r = await fetch(DEXSCR+'/token-boosts/top/v1?chainId=pulsechain');
+    if (r.ok) {
+      var j = await r.json();
+      var addrs = (j||[]).slice(0,20).map(function(t){return t.tokenAddress;}).filter(Boolean);
+      if (addrs.length) {
+        var r2 = await fetch(DEXSCR+'/tokens/v1/pulsechain/'+addrs.join(','));
+        if (r2.ok) {
+          var j2 = await r2.json();
+          (j2||[]).forEach(function(tok){
+            if (tok.pairs&&tok.pairs.length) tokens.push(tok.pairs[0]);
+          });
+        }
+      }
+    }
+  } catch(e) {}
+  return tokens;
+}
+
+async function fetchRecentPairs() {
+  var tokens = [];
+  try {
+    // Search for recent PulseChain pairs via DexScreener
+    var r = await fetch(DEXSCR+'/dex/search?q=pulsechain&chainId=pulsechain');
+    if (r.ok) {
+      var j = await r.json();
+      (j.pairs||[]).forEach(function(p){ tokens.push(p); });
+    }
+  } catch(e) {}
+  return tokens;
+}
+
+async function fetchPumpTiresPairs() {
+  var tokens = [];
+  try {
+    // Get pump.tires token via their known token address
+    var r = await fetch(DEXSCR+'/dex/search?q=pump.tires');
+    if (r.ok) {
+      var j = await r.json();
+      (j.pairs||[]).filter(function(p){
+        return p.chainId==='pulsechain';
+      }).forEach(function(p){ tokens.push(p); });
+    }
+  } catch(e) {}
+  return tokens;
+}
+
+// ── Main load ───────────────────────────────────────────────────────────────
+async function loadAll() {
+  document.getElementById('all-grid').innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="spinner"></div><div class="state-title">Scanning PulseChain launches...</div></div>';
+
+  try {
+    // Fetch from multiple sources in parallel
+    var results = await Promise.all([
+      fetchNewPairs(),
+      fetchTrendingPairs(),
+      fetchPumpTiresPairs(),
+    ]);
+
+    // Merge and dedupe by pair address
+    var seen = {};
+    var merged = [];
+    results.forEach(function(arr){
+      arr.forEach(function(tok){
+        var key = tok.pairAddress||tok.baseToken&&tok.baseToken.address;
+        if (key && !seen[key] && tok.chainId==='pulsechain') {
+          seen[key] = true;
+          merged.push(tok);
+        }
+      });
+    });
+
+    // Filter: only tokens with some activity
+    allTokens = merged.filter(function(t){
+      var liq = parseFloat(t.liquidity&&t.liquidity.usd||0);
+      return liq > 100;
+    });
+
+    // Sort by volume by default
+    sortTokens();
+    updateStats();
+    renderAll();
+
+    document.getElementById('stat-time').textContent = new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+
+  } catch(e) {
+    document.getElementById('all-grid').innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="state-icon">⚠️</div><div class="state-title">Error loading data</div></div>';
+  }
+}
+
+// ── Sort ─────────────────────────────────────────────────────────────────────
+function sortTokens() {
+  allTokens.sort(function(a,b){
+    if (sortBy==='volume') return parseFloat(b.volume&&b.volume.h24||0)-parseFloat(a.volume&&a.volume.h24||0);
+    if (sortBy==='age') return (b.pairCreatedAt||0)-(a.pairCreatedAt||0);
+    if (sortBy==='change') return parseFloat(b.priceChange&&b.priceChange.h24||0)-parseFloat(a.priceChange&&a.priceChange.h24||0);
+    if (sortBy==='mcap') return parseFloat(b.marketCap||0)-parseFloat(a.marketCap||0);
+    if (sortBy==='grad') return gradProgress(b)-gradProgress(a);
+    return 0;
+  });
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────────
+function updateStats() {
+  var now = Date.now();
+  var oneDayAgo = now - 86400000;
+  var newToday = allTokens.filter(function(t){return t.pairCreatedAt && t.pairCreatedAt > oneDayAgo;}).length;
+  var graduated = allTokens.filter(function(t){return isGraduated(t);}).length;
+  var hot = allTokens.filter(function(t){return getMomentum(t)>=6;}).length;
+  var totalVol = allTokens.reduce(function(s,t){return s+parseFloat(t.volume&&t.volume.h24||0);},0);
+
+  document.getElementById('stat-new').textContent = newToday;
+  document.getElementById('stat-grad').textContent = graduated;
+  document.getElementById('stat-hot').textContent = hot;
+  document.getElementById('stat-vol').textContent = fmtNum(totalVol).replace('$','')+'';
+  document.getElementById('stat-vol').textContent = fmt(totalVol);
+}
+
+// ── Render ──────────────────────────────────────────────────────────────────
+function renderAll() {
+  var filtered = applyFilters(allTokens);
+
+  // Sections
+  var graduated = filtered.filter(function(t){return isGraduated(t);});
+  var hot = filtered.filter(function(t){return getMomentum(t)>=6&&!isGraduated(t);});
+  var now = Date.now();
+  var newTokens = filtered.filter(function(t){
+    var age = t.pairCreatedAt ? (now-t.pairCreatedAt)/3600000 : 999;
+    return age < 24 && !isGraduated(t) && getMomentum(t)<6;
+  });
+
+  // Show/hide sections based on filter type
+  var showType = filters.type;
+
+  var gradSec = document.getElementById('grad-section');
+  var hotSec  = document.getElementById('hot-section');
+  var newSec  = document.getElementById('new-section');
+  var allSec  = document.getElementById('all-section');
+
+  if (showType==='all') {
+    gradSec.style.display = graduated.length ? 'block' : 'none';
+    hotSec.style.display  = hot.length ? 'block' : 'none';
+    newSec.style.display  = newTokens.length ? 'block' : 'none';
+    allSec.style.display  = 'block';
+    document.getElementById('grad-grid').innerHTML = graduated.map(renderCard).join('');
+    document.getElementById('hot-grid').innerHTML  = hot.map(renderCard).join('');
+    document.getElementById('new-grid').innerHTML  = newTokens.map(renderCard).join('');
+    document.getElementById('all-grid').innerHTML  = filtered.length ? filtered.map(renderCard).join('') : '<div class="state" style="grid-column:1/-1;"><div class="state-icon">🔍</div><div class="state-title">No tokens match filters</div></div>';
+  } else {
+    gradSec.style.display='none'; hotSec.style.display='none'; newSec.style.display='none';
+    allSec.style.display='block';
+    var subset = showType==='graduated' ? graduated : showType==='hot' ? hot : newTokens;
+    document.getElementById('all-grid').innerHTML = subset.length ? subset.map(renderCard).join('') : '<div class="state" style="grid-column:1/-1;"><div class="state-icon">🔍</div><div class="state-title">No tokens in this category</div></div>';
+  }
+}
+
+// ── Filters ──────────────────────────────────────────────────────────────────
+function applyFilters(tokens) {
+  var now = Date.now();
+  return tokens.filter(function(t){
+    // Age filter
+    if (filters.age !== 'all' && t.pairCreatedAt) {
+      var hours = (now - t.pairCreatedAt) / 3600000;
+      if (filters.age==='1h' && hours>1) return false;
+      if (filters.age==='6h' && hours>6) return false;
+      if (filters.age==='24h' && hours>24) return false;
+    }
+    // Search
+    if (searchTerm) {
+      var s = searchTerm.toLowerCase();
+      var sym = (t.baseToken&&t.baseToken.symbol||'').toLowerCase();
+      var name = (t.baseToken&&t.baseToken.name||'').toLowerCase();
+      if (!sym.includes(s) && !name.includes(s)) return false;
+    }
+    return true;
+  });
+}
+
+function setFilter(type, val, el) {
+  filters[type] = val;
+  // Update button states for this row
+  el.parentElement.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  renderAll();
+}
+
+function setSort(val, el) {
+  sortBy = val;
+  document.querySelectorAll('.filter-row:last-child .fbtn').forEach(function(b){b.classList.remove('active');});
+  el.classList.add('active');
+  sortTokens();
+  renderAll();
+}
+
+function doSearch(val) {
+  searchTerm = val.trim();
+  renderAll();
+}
+
+// ── Auto refresh every 60s ───────────────────────────────────────────────────
+loadAll();
+setInterval(loadAll, 60000);
+</script>
+</body>
+</html>
