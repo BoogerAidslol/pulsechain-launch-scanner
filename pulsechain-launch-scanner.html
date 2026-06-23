@@ -196,6 +196,23 @@ var PULSEX_V1_FACTORY = '0x1715a3E4A142d8b698131108995174F37aEBA10D';
 // PulseX V2 factory  
 var PULSEX_V2_FACTORY = '0x29eA7545DEfA1b5eb89e2b978BF4Aed6D6BeF5E3';
 
+// Known LEGITIMATE token addresses - never flag these as pump.tires
+var KNOWN_LEGIT = {
+  '0x95b303987a60c71504d99aa1b13b4da07b0790ab': {name:'PulseX', sym:'PLSX'},
+  '0x2b591e99afe9f32eaa6214f7b7629768c40eeb39': {name:'HEX', sym:'HEX'},
+  '0xa1077a294dde1b09bb078844df40758a5d0f9a27': {name:'Wrapped PLS', sym:'WPLS'},
+  '0xefD766cCb38EaF1dfd701853BFCe31359239F305': {name:'DAI', sym:'DAI'},
+  '0x15d38573d2feeb82e7ad5187ab8c1d52810b1f07': {name:'USDC', sym:'USDC'},
+  '0x0cb6f5a34ad42ec934882a05265a7d5f59b51a2f': {name:'USDT', sym:'USDT'},
+  '0x3819f64f282bf135d62168c1e513280daf905e06': {name:'Hedron', sym:'HDRN'},
+  '0x8a810ea8b121d08342e9e7696f4a9915cbe494b7': {name:'Icosa', sym:'ICSA'},
+};
+
+// pump.tires factory - tokens created here are genuine pump.tires launches
+var PUMP_TIRES_CREATORS = [
+  '0x4b576a0b79b12f7a45f88d15a58e9e2c359f81c5', // main factory
+];
+
 var allTokens = [];
 var filters = {age:'all', type:'all'};
 var sortBy = 'volume';
@@ -300,7 +317,8 @@ function rugIndicators(tok) {
 // pump.tires graduates at 200M PLS ~ roughly $2200 USD at current prices
 function gradProgress(tok) {
   var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
-  // Rough estimate: graduation at ~$2200 USD liquidity for pump.tires
+  // pump.tires graduates at 200M PLS bonding curve
+  // At ~$0.000011 per PLS that's ~$2200 USD
   var target = 2200;
   var pct = Math.min((liq/target)*100, 100);
   return pct;
@@ -325,17 +343,60 @@ function whaleHtml(tok) {
 
 // ── Is pump.tires token ─────────────────────────────────────────────────────
 function isPumpTires(tok) {
-  // pump.tires tokens have WPLS as quote token and very small initial liquidity
-  var qa = (tok.quoteToken&&tok.quoteToken.address||'').toLowerCase();
+  var baseAddr = (tok.baseToken&&tok.baseToken.address||'').toLowerCase();
+  var quoteAddr = (tok.quoteToken&&tok.quoteToken.address||'').toLowerCase();
   var wpls = '0xa1077a294dde1b09bb078844df40758a5d0f9a27';
-  return qa === wpls;
+  
+  // Never flag known legitimate tokens as pump.tires
+  if (KNOWN_LEGIT[baseAddr]) return false;
+  
+  // Must have WPLS as quote token AND low market cap (pump.tires signature)
+  var mc = parseFloat(tok.marketCap||0);
+  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  var dex = (tok.dexId||'').toLowerCase();
+  
+  // pump.tires tokens trade on pulsex but started on bonding curve
+  // They have WPLS as quote and typically small-mid market cap
+  if (quoteAddr === wpls && mc < 5000000 && !KNOWN_LEGIT[baseAddr]) return true;
+  
+  // Also check dexId for pump.tires specific dex
+  if (dex.includes('pump') || dex.includes('tire')) return true;
+  
+  return false;
+}
+
+// ── Is fake/copy token ───────────────────────────────────────────────────────
+function isFakeToken(tok) {
+  var baseAddr = (tok.baseToken&&tok.baseToken.address||'').toLowerCase();
+  var baseName = (tok.baseToken&&tok.baseToken.name||'').toLowerCase();
+  var baseSym  = (tok.baseToken&&tok.baseToken.symbol||'').toLowerCase();
+  
+  // Check if name/symbol matches a known legit token but address doesn't
+  for (var addr in KNOWN_LEGIT) {
+    var legit = KNOWN_LEGIT[addr];
+    var legitName = legit.name.toLowerCase();
+    var legitSym  = legit.sym.toLowerCase();
+    if ((baseName === legitName || baseSym === legitSym) && baseAddr !== addr) {
+      return true; // Same name/symbol, different address = fake!
+    }
+  }
+  return false;
 }
 
 function isGraduated(tok) {
-  // Graduated tokens have higher liquidity (>$2000) and were recently added to PulseX
+  // Graduated = was a pump.tires token that hit the bonding curve target
+  // and now has a real PulseX pair with significant liquidity
   var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  var mc  = parseFloat(tok.marketCap||0);
   var age = tok.pairCreatedAt ? (Date.now() - tok.pairCreatedAt)/3600000 : 999;
-  return liq > 1500 && age < 72 && isPumpTires(tok);
+  var baseAddr = (tok.baseToken&&tok.baseToken.address||'').toLowerCase();
+  
+  // Must not be a known legit token
+  if (KNOWN_LEGIT[baseAddr]) return false;
+  
+  // Graduation threshold: ~$2200 USD liquidity (200M PLS at ~$0.000011)
+  // Recently created pair (within 7 days) with enough liquidity = graduated
+  return liq >= 1800 && liq <= 50000 && age < 168 && isPumpTires(tok);
 }
 
 // ── Render token card ───────────────────────────────────────────────────────
@@ -366,8 +427,9 @@ function renderCard(tok) {
 
   // Badges
   var badges = '';
+  if (tok._isFake) badges += '<span class="badge red">⚠️ FAKE/COPY</span>';
   if (graduated) badges += '<span class="badge green">🎓 Grad</span>';
-  if (pumpTires) badges += '<span class="badge pulse">pump.tires</span>';
+  if (pumpTires && !tok._isFake) badges += '<span class="badge pulse">pump.tires</span>';
   if (momentum >= 6) badges += '<span class="badge red">🔥 Hot</span>';
   if (age.includes('m ago') || age.includes('s ago')) badges += '<span class="badge blue">🆕 New</span>';
 
@@ -493,10 +555,29 @@ async function loadAll() {
       });
     });
 
-    // Filter: only tokens with some activity
+    // Filter: only tokens with some activity, dedupe by BASE token address
+    var seenBase = {};
     allTokens = merged.filter(function(t){
       var liq = parseFloat(t.liquidity&&t.liquidity.usd||0);
-      return liq > 100;
+      if (liq < 100) return false;
+      
+      // Dedupe by base token address (keeps highest liquidity pair)
+      var baseAddr = (t.baseToken&&t.baseToken.address||'').toLowerCase();
+      if (seenBase[baseAddr]) {
+        var existing = seenBase[baseAddr];
+        var existLiq = parseFloat(existing.liquidity&&existing.liquidity.usd||0);
+        if (liq <= existLiq) return false;
+        // Remove the lower liquidity one
+        var idx = allTokens ? allTokens.indexOf(existing) : -1;
+        if (idx > -1) allTokens.splice(idx, 1);
+      }
+      seenBase[baseAddr] = t;
+      return true;
+    });
+    
+    // Tag fake tokens
+    allTokens.forEach(function(t){
+      t._isFake = isFakeToken(t);
     });
 
     // Sort by volume by default
