@@ -14,101 +14,148 @@ header{border-bottom:1px solid var(--border);padding:14px 24px;display:flex;alig
 .logo-icon{width:27px;height:27px;background:linear-gradient(135deg,#9D4EDD,#6B21A8);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;}
 .hright{display:flex;align-items:center;gap:10px;}
 .live-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-family:'Courier New',monospace;}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
-.btn-refresh{background:var(--bg2);border:1px solid var(--border2);color:var(--sub);border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;font-family:inherit;}
-.btn-refresh:hover{border-color:var(--pulse);color:var(--text);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.btn{background:var(--bg2);border:1px solid var(--border2);color:var(--sub);border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;font-family:inherit;}
+.btn:hover{border-color:var(--pulse);color:var(--text);}
+.btn.primary{background:var(--pulse);border-color:var(--pulse);color:#fff;}
+
+/* Chain health bar */
+.chain-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;gap:20px;overflow-x:auto;flex-wrap:nowrap;}
+.chain-stat{display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:12px;flex-shrink:0;}
+.chain-stat-label{color:var(--muted);}
+.chain-stat-val{font-weight:600;font-family:'Courier New',monospace;}
+.chain-stat-val.green{color:var(--green);}
+.chain-stat-val.amber{color:var(--amber);}
+.chain-stat-val.pulse{color:var(--pulse);}
+
+/* Tabs */
+.main-tabs{max-width:1200px;margin:20px auto 0;padding:0 20px;display:flex;gap:4px;border-bottom:1px solid var(--border);}
+.mtab{padding:9px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;user-select:none;}
+.mtab:hover{color:var(--sub);}
+.mtab.active{color:var(--text);border-bottom-color:var(--pulse);}
+.mtab-count{display:inline-block;background:var(--bg3);color:var(--muted);font-size:10px;padding:1px 6px;border-radius:8px;margin-left:5px;}
+.mtab.active .mtab-count{background:rgba(157,78,221,0.2);color:var(--pulse);}
+.mpanel{display:none;max-width:1200px;margin:0 auto;padding:16px 20px 0;}
+.mpanel.active{display:block;}
 
 /* Filters */
-.filters{max-width:1100px;margin:20px auto 0;padding:0 20px;}
-.filter-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;}
-.filter-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-right:4px;}
-.fbtn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center;}
+.filter-group{display:flex;align-items:center;gap:6px;}
+.filter-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;}
+.fbtn{background:var(--bg2);border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:5px 11px;font-size:12px;cursor:pointer;font-family:inherit;}
 .fbtn:hover{border-color:var(--border2);color:var(--sub);}
 .fbtn.active{background:rgba(157,78,221,0.1);border-color:var(--pulse);color:var(--pulse);}
-.fbtn.green.active{background:rgba(34,197,94,0.1);border-color:var(--green);color:var(--green);}
-.fbtn.amber.active{background:rgba(245,158,11,0.1);border-color:var(--amber);color:var(--amber);}
-.fbtn.red.active{background:rgba(239,68,68,0.1);border-color:var(--red);color:var(--red);}
-.search-input{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 12px;font-size:12px;font-family:inherit;outline:none;width:180px;}
-.search-input:focus{border-color:var(--pulse);}
-.search-input::placeholder{color:var(--muted);}
+.search-inp{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:5px 12px;font-size:12px;font-family:inherit;outline:none;width:200px;}
+.search-inp:focus{border-color:var(--pulse);}
+.search-inp::placeholder{color:var(--muted);}
 
-/* Stats bar */
-.stats-bar{max-width:1100px;margin:0 auto 16px;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;}
-.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px;}
-.stat-val{font-size:18px;font-weight:700;font-family:'Courier New',monospace;}
-.stat-val.green{color:var(--green);}.stat-val.amber{color:var(--amber);}.stat-val.red{color:var(--red);}.stat-val.pulse{color:var(--pulse);}
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px;}
+.scard{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+.scard-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px;}
+.scard-val{font-size:18px;font-weight:700;font-family:'Courier New',monospace;}
+.scard-val.green{color:var(--green);}
+.scard-val.red{color:var(--red);}
+.scard-val.amber{color:var(--amber);}
+.scard-val.pulse{color:var(--pulse);}
+.scard-val.blue{color:var(--blue);}
 
 /* Token grid */
-main{max-width:1100px;margin:0 auto;padding:0 20px;}
-.section-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
-.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
-.token-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px;margin-bottom:24px;}
+.tok-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;}
 
 /* Token card */
-.tok-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color 0.2s;}
+.tok-card{background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:14px 15px;transition:border-color 0.15s;}
 .tok-card:hover{border-color:var(--border2);}
-.tok-card.graduated{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.03);}
-.tok-card.hot{border-color:rgba(239,68,68,0.25);background:rgba(239,68,68,0.03);}
-.tok-card.new{border-color:rgba(59,130,246,0.25);background:rgba(59,130,246,0.03);}
+.tok-card.bonding{border-color:rgba(59,130,246,0.2);background:rgba(59,130,246,0.02);}
+.tok-card.graduated{border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.02);}
+.tok-card.hot{border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.02);}
+.tok-card.fake{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.04);}
 
-.tok-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.tok-icon{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sub);flex-shrink:0;overflow:hidden;}
-.tok-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.tok-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.tok-sym{font-size:11px;color:var(--muted);font-family:'Courier New',monospace;}
-.tok-badges{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto;flex-shrink:0;}
-.badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap;}
+.tok-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.tok-logo{width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sub);flex-shrink:0;overflow:hidden;}
+.tok-logo img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.tok-nameblock{flex:1;min-width:0;}
+.tok-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tok-sym{font-size:10px;color:var(--muted);font-family:'Courier New',monospace;}
+.tok-badges{display:flex;gap:4px;flex-wrap:wrap;}
+.badge{font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;white-space:nowrap;}
 .badge.green{background:rgba(34,197,94,0.12);color:var(--green);}
 .badge.red{background:rgba(239,68,68,0.12);color:var(--red);}
 .badge.amber{background:rgba(245,158,11,0.12);color:var(--amber);}
 .badge.blue{background:rgba(59,130,246,0.12);color:var(--blue);}
 .badge.pulse{background:rgba(157,78,221,0.12);color:var(--pulse);}
+.badge.muted{background:var(--bg3);color:var(--muted);}
 
 .tok-price-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
 .tok-price{font-size:16px;font-weight:700;font-family:'Courier New',monospace;}
-.tok-change{font-size:12px;font-weight:600;font-family:'Courier New',monospace;padding:2px 7px;border-radius:4px;}
-.tok-change.up{background:rgba(34,197,94,0.1);color:var(--green);}
-.tok-change.down{background:rgba(239,68,68,0.1);color:var(--red);}
+.tok-chg{font-size:12px;font-weight:600;padding:2px 7px;border-radius:4px;}
+.tok-chg.up{background:rgba(34,197,94,0.1);color:var(--green);}
+.tok-chg.dn{background:rgba(239,68,68,0.1);color:var(--red);}
 
-.tok-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;}
-.ts-item{}
-.ts-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px;}
+.tok-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+.ts-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:2px;}
 .ts-val{font-size:12px;font-weight:500;font-family:'Courier New',monospace;}
+.ts-val.green{color:var(--green);}
+.ts-val.red{color:var(--red);}
 
-/* Graduation bar */
-.grad-bar-wrap{margin-bottom:8px;}
-.grad-bar-top{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;}
-.grad-bar-bg{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
-.grad-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--pulse),var(--green));}
+/* Bonding bar */
+.bond-bar-wrap{margin-bottom:8px;}
+.bond-bar-top{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;}
+.bond-bar-bg{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;}
+.bond-bar-fill{height:100%;border-radius:3px;transition:width 0.3s;}
 
 /* Momentum */
-.momentum{display:flex;align-items:center;gap:4px;margin-bottom:8px;}
-.mom-label{font-size:10px;color:var(--muted);margin-right:4px;}
-.mom-fire{font-size:13px;}
+.momentum{font-size:11px;color:var(--sub);margin-bottom:8px;}
 
-/* Whale alert */
-.whale-row{background:rgba(157,78,221,0.06);border:1px solid rgba(157,78,221,0.15);border-radius:6px;padding:6px 10px;font-size:11px;color:var(--sub);display:flex;align-items:center;gap:6px;margin-bottom:6px;}
-.whale-icon{font-size:13px;}
+/* Whale */
+.whale{background:rgba(157,78,221,0.07);border:1px solid rgba(157,78,221,0.15);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--sub);margin-bottom:7px;}
 
-/* Footer links */
-.tok-links{display:flex;gap:8px;}
-.tok-link{font-size:11px;color:var(--pulse);text-decoration:none;opacity:0.7;}
-.tok-link:hover{opacity:1;}
+/* Links */
+.tok-links{display:flex;gap:10px;}
+.tok-lnk{font-size:11px;color:var(--pulse);text-decoration:none;opacity:0.75;}
+.tok-lnk:hover{opacity:1;}
+
+/* Live feed */
+.feed-list{display:flex;flex-direction:column;gap:6px;max-height:600px;overflow-y:auto;}
+.feed-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:12px;animation:slideIn 0.3s ease;}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:none;}}
+.feed-icon{font-size:16px;flex-shrink:0;}
+.feed-info{flex:1;min-width:0;}
+.feed-title{font-size:13px;font-weight:600;}
+.feed-sub{font-size:11px;color:var(--muted);margin-top:2px;font-family:'Courier New',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.feed-right{text-align:right;flex-shrink:0;}
+.feed-val{font-size:12px;font-weight:600;font-family:'Courier New',monospace;}
+.feed-time{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* TVL table */
+.tvl-table{width:100%;border-collapse:collapse;}
+.tvl-table th{font-size:10px;text-transform:uppercase;letter-spacing:0.4px;color:var(--muted);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);font-weight:500;}
+.tvl-table th:last-child,.tvl-table td:last-child{text-align:right;}
+.tvl-row{border-bottom:1px solid var(--border);}
+.tvl-row:hover{background:rgba(255,255,255,0.02);}
+.tvl-row td{padding:10px 12px;font-size:13px;}
+.tvl-name{font-weight:600;}
+.tvl-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.tvl-val{font-family:'Courier New',monospace;font-weight:600;}
+.tvl-chg{font-size:11px;font-family:'Courier New',monospace;padding:2px 6px;border-radius:4px;}
+
+/* Grad alert popup */
+.grad-alert{position:fixed;top:70px;right:20px;z-index:999;background:var(--bg2);border:1px solid var(--green);border-radius:12px;padding:14px 18px;font-size:12px;max-width:280px;box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+.grad-alert-title{color:var(--green);font-weight:700;margin-bottom:4px;font-size:13px;}
 
 /* State */
-.state{text-align:center;padding:60px 20px;color:var(--muted);}
-.state-icon{font-size:36px;margin-bottom:12px;}
-.state-title{font-size:15px;font-weight:500;color:var(--sub);margin-bottom:6px;}
-.spinner{width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--pulse);border-radius:50%;animation:spin 0.75s linear infinite;margin:0 auto 12px;}
+.state{text-align:center;padding:50px 20px;color:var(--muted);}
+.state-icon{font-size:34px;margin-bottom:12px;}
+.state-title{font-size:14px;font-weight:500;color:var(--sub);margin-bottom:5px;}
+.spinner{width:22px;height:22px;border:2px solid var(--border2);border-top-color:var(--pulse);border-radius:50%;animation:spin 0.75s linear infinite;margin:0 auto 12px;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
-/* New token flash */
-@keyframes flashIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
-.flash{animation:flashIn 0.3s ease;}
+.sec-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
 
-footer{text-align:center;margin-top:44px;font-size:11px;color:var(--muted);line-height:1.8;}
-@media(max-width:600px){.token-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:repeat(2,1fr);}}
+footer{text-align:center;margin-top:44px;font-size:11px;color:var(--muted);line-height:1.8;padding:0 20px;}
+@media(max-width:600px){.tok-grid{grid-template-columns:1fr;}.chain-bar{gap:14px;}.stats-row{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
@@ -116,124 +163,205 @@ footer{text-align:center;margin-top:44px;font-size:11px;color:var(--muted);line-
 <header>
   <div class="logo"><div class="logo-icon">🚀</div> PulseChain Launch Scanner</div>
   <div class="hright">
-    <div class="live-badge"><div class="live-dot"></div> LIVE</div>
-    <button class="btn-refresh" onclick="loadAll()">↻ Refresh</button>
+    <div class="live-badge"><div class="live-dot"></div> LIVE · Chain 369</div>
+    <button class="btn" onclick="refreshAll()">↻ Refresh</button>
   </div>
 </header>
 
-<div class="filters">
-  <div class="filter-row">
-    <span class="filter-label">Age:</span>
-    <button class="fbtn active" onclick="setFilter('age','all',this)">All</button>
-    <button class="fbtn" onclick="setFilter('age','1h',this)">1H</button>
-    <button class="fbtn" onclick="setFilter('age','6h',this)">6H</button>
-    <button class="fbtn" onclick="setFilter('age','24h',this)">24H</button>
-  </div>
-  <div class="filter-row">
-    <span class="filter-label">Type:</span>
-    <button class="fbtn active" onclick="setFilter('type','all',this)">All</button>
-    <button class="fbtn green" onclick="setFilter('type','graduated',this)">🎓 Graduated</button>
-    <button class="fbtn amber" onclick="setFilter('type','hot',this)">🔥 Hot</button>
-    <button class="fbtn blue" onclick="setFilter('type','new',this)">🆕 New</button>
-  </div>
-  <div class="filter-row">
-    <span class="filter-label">Sort:</span>
-    <button class="fbtn active" onclick="setSort('volume',this)">Volume</button>
-    <button class="fbtn" onclick="setSort('age',this)">Newest</button>
-    <button class="fbtn" onclick="setSort('change',this)">% Change</button>
-    <button class="fbtn" onclick="setSort('mcap',this)">Mkt Cap</button>
-    <button class="fbtn" onclick="setSort('grad',this)">Grad %</button>
-    <input class="search-input" type="text" placeholder="Search name / symbol..." oninput="doSearch(this.value)" id="search-box"/>
-  </div>
+<!-- Chain health bar -->
+<div class="chain-bar" id="chain-bar">
+  <div class="chain-stat"><span class="chain-stat-label">Block:</span><span class="chain-stat-val pulse" id="cb-block">—</span></div>
+  <div class="chain-stat"><span class="chain-stat-label">PLS Price:</span><span class="chain-stat-val" id="cb-pls">—</span></div>
+  <div class="chain-stat"><span class="chain-stat-label">Chain TVL:</span><span class="chain-stat-val green" id="cb-tvl">—</span></div>
+  <div class="chain-stat"><span class="chain-stat-label">PulseX Vol 24h:</span><span class="chain-stat-val" id="cb-vol">—</span></div>
+  <div class="chain-stat"><span class="chain-stat-label">New Pairs Today:</span><span class="chain-stat-val pulse" id="cb-pairs">—</span></div>
+  <div class="chain-stat"><span class="chain-stat-label">pump.tires Launches:</span><span class="chain-stat-val amber" id="cb-pump">—</span></div>
+  <div class="chain-stat"><span class="chain-stat-label">Last Block:</span><span class="chain-stat-val" id="cb-time">—</span></div>
 </div>
 
-<div class="stats-bar" id="stats-bar">
-  <div class="stat-card"><div class="stat-label">New Today</div><div class="stat-val pulse" id="stat-new">—</div></div>
-  <div class="stat-card"><div class="stat-label">Graduated</div><div class="stat-val green" id="stat-grad">—</div></div>
-  <div class="stat-card"><div class="stat-label">🔥 Hot</div><div class="stat-val red" id="stat-hot">—</div></div>
-  <div class="stat-card"><div class="stat-label">Total Volume</div><div class="stat-val" id="stat-vol">—</div></div>
-  <div class="stat-card"><div class="stat-label">Last Updated</div><div class="stat-val" id="stat-time" style="font-size:13px;">—</div></div>
+<!-- Main tabs -->
+<div class="main-tabs">
+  <div class="mtab active" onclick="switchTab('bonding')">🔵 Bonding Curve <span class="mtab-count" id="cnt-bonding">0</span></div>
+  <div class="mtab" onclick="switchTab('graduated')">🎓 Graduated <span class="mtab-count" id="cnt-graduated">0</span></div>
+  <div class="mtab" onclick="switchTab('all')">📊 All Tokens <span class="mtab-count" id="cnt-all">0</span></div>
+  <div class="mtab" onclick="switchTab('feed')">⚡ Live Feed <span class="mtab-count" id="cnt-feed">0</span></div>
+  <div class="mtab" onclick="switchTab('tvl')">🏦 Chain TVL</div>
 </div>
 
-<main>
-  <div id="grad-section" style="display:none;">
-    <div class="section-title">🎓 Recently Graduated to PulseX</div>
-    <div class="token-grid" id="grad-grid"></div>
+<!-- Bonding curve tab -->
+<div class="mpanel active" id="panel-bonding">
+  <div class="stats-row">
+    <div class="scard"><div class="scard-lbl">On Bonding Curve</div><div class="scard-val blue" id="stat-bonding">—</div></div>
+    <div class="scard"><div class="scard-lbl">Avg Progress</div><div class="scard-val amber" id="stat-avg-prog">—</div></div>
+    <div class="scard"><div class="scard-lbl">Near Graduation</div><div class="scard-val green" id="stat-near-grad">—</div></div>
+    <div class="scard"><div class="scard-lbl">Total PLS Raised</div><div class="scard-val pulse" id="stat-pls-raised">—</div></div>
   </div>
-  <div id="hot-section" style="display:none;">
-    <div class="section-title">🔥 Hot Right Now</div>
-    <div class="token-grid" id="hot-grid"></div>
-  </div>
-  <div id="new-section" style="display:none;">
-    <div class="section-title">🆕 New Launches</div>
-    <div class="token-grid" id="new-grid"></div>
-  </div>
-  <div id="all-section">
-    <div class="section-title">All Tokens</div>
-    <div class="token-grid" id="all-grid">
-      <div class="state" style="grid-column:1/-1;">
-        <div class="spinner"></div>
-        <div class="state-title">Scanning PulseChain...</div>
-      </div>
+  <div class="sec-title">Tokens on pump.tires Bonding Curve</div>
+  <div class="filters">
+    <div class="filter-group">
+      <span class="filter-label">Sort:</span>
+      <button class="fbtn active" onclick="setBondSort('progress',this)">Progress %</button>
+      <button class="fbtn" onclick="setBondSort('newest',this)">Newest</button>
+      <button class="fbtn" onclick="setBondSort('volume',this)">Volume</button>
     </div>
+    <input class="search-inp" type="text" placeholder="Search token..." oninput="filterBonding(this.value)" id="bond-search"/>
   </div>
-</main>
+  <div class="tok-grid" id="bonding-grid">
+    <div class="state" style="grid-column:1/-1;"><div class="spinner"></div><div class="state-title">Reading pump.tires contract...</div></div>
+  </div>
+</div>
+
+<!-- Graduated tab -->
+<div class="mpanel" id="panel-graduated">
+  <div class="stats-row">
+    <div class="scard"><div class="scard-lbl">Total Graduated</div><div class="scard-val green" id="stat-grad-total">—</div></div>
+    <div class="scard"><div class="scard-lbl">Today</div><div class="scard-val pulse" id="stat-grad-today">—</div></div>
+    <div class="scard"><div class="scard-lbl">🔥 Hot</div><div class="scard-val red" id="stat-grad-hot">—</div></div>
+    <div class="scard"><div class="scard-lbl">Total Volume 24h</div><div class="scard-val" id="stat-grad-vol">—</div></div>
+  </div>
+  <div class="sec-title">Graduated to PulseX</div>
+  <div class="filters">
+    <div class="filter-group">
+      <span class="filter-label">Age:</span>
+      <button class="fbtn active" onclick="setGradFilter('age','all',this)">All</button>
+      <button class="fbtn" onclick="setGradFilter('age','24h',this)">24H</button>
+      <button class="fbtn" onclick="setGradFilter('age','7d',this)">7D</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Sort:</span>
+      <button class="fbtn active" onclick="setGradSort('volume',this)">Volume</button>
+      <button class="fbtn" onclick="setGradSort('newest',this)">Newest</button>
+      <button class="fbtn" onclick="setGradSort('change',this)">% Change</button>
+      <button class="fbtn" onclick="setGradSort('mcap',this)">Mkt Cap</button>
+    </div>
+    <input class="search-inp" type="text" placeholder="Search token..." oninput="filterGraduated(this.value)"/>
+  </div>
+  <div class="tok-grid" id="graduated-grid">
+    <div class="state" style="grid-column:1/-1;"><div class="spinner"></div><div class="state-title">Loading graduated tokens...</div></div>
+  </div>
+</div>
+
+<!-- All tokens tab -->
+<div class="mpanel" id="panel-all">
+  <div class="filters">
+    <div class="filter-group">
+      <span class="filter-label">Type:</span>
+      <button class="fbtn active" onclick="setAllFilter('all',this)">All</button>
+      <button class="fbtn" onclick="setAllFilter('hot',this)">🔥 Hot</button>
+      <button class="fbtn" onclick="setAllFilter('new',this)">🆕 New</button>
+      <button class="fbtn" onclick="setAllFilter('fake',this)">⚠️ Fakes</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Sort:</span>
+      <button class="fbtn active" onclick="setAllSort('volume',this)">Volume</button>
+      <button class="fbtn" onclick="setAllSort('newest',this)">Newest</button>
+      <button class="fbtn" onclick="setAllSort('change',this)">% Change</button>
+    </div>
+    <input class="search-inp" type="text" placeholder="Search name / symbol..." oninput="filterAll(this.value)"/>
+  </div>
+  <div class="tok-grid" id="all-grid">
+    <div class="state" style="grid-column:1/-1;"><div class="spinner"></div><div class="state-title">Loading all tokens...</div></div>
+  </div>
+</div>
+
+<!-- Live feed tab -->
+<div class="mpanel" id="panel-feed">
+  <div class="stats-row" style="grid-template-columns:repeat(3,1fr);">
+    <div class="scard"><div class="scard-lbl">Events Today</div><div class="scard-val pulse" id="stat-feed-total">0</div></div>
+    <div class="scard"><div class="scard-lbl">Graduations</div><div class="scard-val green" id="stat-feed-grads">0</div></div>
+    <div class="scard"><div class="scard-lbl">New Launches</div><div class="scard-val blue" id="stat-feed-launches">0</div></div>
+  </div>
+  <div class="sec-title">Real-time PulseChain Events</div>
+  <div class="feed-list" id="feed-list">
+    <div class="state"><div class="spinner"></div><div class="state-title">Watching blockchain...</div></div>
+  </div>
+</div>
+
+<!-- TVL tab -->
+<div class="mpanel" id="panel-tvl">
+  <div class="stats-row">
+    <div class="scard"><div class="scard-lbl">Total Chain TVL</div><div class="scard-val green" id="stat-tvl-total">—</div></div>
+    <div class="scard"><div class="scard-lbl">PulseX TVL</div><div class="scard-val pulse" id="stat-tvl-pulsex">—</div></div>
+    <div class="scard"><div class="scard-lbl">24h Change</div><div class="scard-val" id="stat-tvl-change">—</div></div>
+    <div class="scard"><div class="scard-lbl">Protocols</div><div class="scard-val" id="stat-tvl-protos">—</div></div>
+  </div>
+  <div class="sec-title">PulseChain Protocol TVL</div>
+  <table class="tvl-table">
+    <thead><tr><th>#</th><th>Protocol</th><th>Category</th><th>TVL</th><th>24h Change</th></tr></thead>
+    <tbody id="tvl-body">
+      <tr><td colspan="5" style="text-align:center;padding:30px;color:var(--muted);"><div class="spinner" style="margin-bottom:8px;"></div>Loading TVL data...</td></tr>
+    </tbody>
+  </table>
+</div>
 
 <footer>
-  PulseChain Launch Scanner · Data via DexScreener · PulseChain RPC · Blockscout<br>
-  Not financial advice · Always DYOR · pump.tires tokens carry extreme risk
+  PulseChain Launch Scanner · pump.tires RPC · DexScreener · DefiLlama · Blockscout<br>
+  Not financial advice · Always DYOR · Meme tokens carry extreme risk
 </footer>
 
 <script>
-var DEXSCR = 'https://api.dexscreener.com';
-var RPC = 'https://rpc.pulsechain.com';
+// ── Config ────────────────────────────────────────────────────────────────────
+var RPC    = 'https://rpc.pulsechain.com';
+var DEXSCR = 'https://api.dexscreener.com/latest/dex';
+var LLAMA  = 'https://api.llama.fi';
 var BSCOUT = 'https://api.scan.pulsechain.com/api/v2';
+var WPLS   = '0xa1077a294dde1b09bb078844df40758a5d0f9a27';
 
-// pump.tires factory contract on PulseChain
-var PUMP_FACTORY = '0x4b576a0b79B12F7A45f88D15a58e9E2C359F81C5';
-// PulseX V1 factory
-var PULSEX_V1_FACTORY = '0x1715a3E4A142d8b698131108995174F37aEBA10D';
-// PulseX V2 factory  
-var PULSEX_V2_FACTORY = '0x29eA7545DEfA1b5eb89e2b978BF4Aed6D6BeF5E3';
+// pump.tires main contract (factory/bonding curve)
+var PUMP_CONTRACT = '0xec4252e62c6de3d655ca9ce3afc12e553ebba274';
+// PulseX V1 + V2 factories
+var PX_V1 = '0x1715a3E4A142d8b698131108995174F37aEBA10D';
+var PX_V2 = '0x29eA7545DEfA1b5eb89e2b978BF4Aed6D6BeF5E3';
 
-// Known LEGITIMATE token addresses - never flag these as pump.tires
-var KNOWN_LEGIT = {
-  '0x95b303987a60c71504d99aa1b13b4da07b0790ab': {name:'PulseX', sym:'PLSX'},
-  '0x2b591e99afe9f32eaa6214f7b7629768c40eeb39': {name:'HEX', sym:'HEX'},
-  '0xa1077a294dde1b09bb078844df40758a5d0f9a27': {name:'Wrapped PLS', sym:'WPLS'},
-  '0xefD766cCb38EaF1dfd701853BFCe31359239F305': {name:'DAI', sym:'DAI'},
-  '0x15d38573d2feeb82e7ad5187ab8c1d52810b1f07': {name:'USDC', sym:'USDC'},
-  '0x0cb6f5a34ad42ec934882a05265a7d5f59b51a2f': {name:'USDT', sym:'USDT'},
-  '0x3819f64f282bf135d62168c1e513280daf905e06': {name:'Hedron', sym:'HDRN'},
-  '0x8a810ea8b121d08342e9e7696f4a9915cbe494b7': {name:'Icosa', sym:'ICSA'},
+// Known legit tokens - never flag as fake/pump.tires
+var LEGIT = {
+  '0x95b303987a60c71504d99aa1b13b4da07b0790ab':'PLSX',
+  '0x2b591e99afe9f32eaa6214f7b7629768c40eeb39':'HEX',
+  '0xa1077a294dde1b09bb078844df40758a5d0f9a27':'WPLS',
+  '0xefd766ccb38eaf1dfd701853bfce31359239f305':'DAI',
+  '0x15d38573d2feeb82e7ad5187ab8c1d52810b1f07':'USDC',
+  '0x0cb6f5a34ad42ec934882a05265a7d5f59b51a2f':'USDT',
+  '0x3819f64f282bf135d62168c1e513280daf905e06':'HDRN',
+  '0x8a810ea8b121d08342e9e7696f4a9915cbe494b7':'ICSA',
+  '0xec4252e62c6de3d655ca9ce3afc12e553ebba274':'PUMP',
 };
 
-// pump.tires factory - tokens created here are genuine pump.tires launches
-var PUMP_TIRES_CREATORS = [
-  '0x4b576a0b79b12f7a45f88d15a58e9e2c359f81c5', // main factory
-];
+// State
+var bondingTokens = [];
+var graduatedTokens = [];
+var allDexTokens = [];
+var feedEvents = [];
+var lastBlock = null;
+var gradSort = 'volume';
+var allFilterType = 'all';
+var allSortType = 'volume';
+var bondSortType = 'progress';
+var gradFilterAge = 'all';
+var searchTerms = {bond:'', grad:'', all:''};
+var feedGrads = 0, feedLaunches = 0;
 
-var allTokens = [];
-var filters = {age:'all', type:'all'};
-var sortBy = 'volume';
-var searchTerm = '';
-var autoRefresh = null;
-
-// ── Helpers ────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 function fmt(v) {
   if (!v||isNaN(v)) return '$0';
   if (v>=1e9) return '$'+(v/1e9).toFixed(2)+'B';
   if (v>=1e6) return '$'+(v/1e6).toFixed(2)+'M';
-  if (v>=1000) return '$'+(v/1000).toFixed(2)+'K';
+  if (v>=1000) return '$'+(v/1000).toFixed(1)+'K';
   if (v>=1) return '$'+v.toFixed(2);
   if (v>=0.0001) return '$'+v.toFixed(6);
   return '$'+v.toExponential(2);
+}
+function fmtPLS(v) {
+  if (!v||isNaN(v)) return '0';
+  if (v>=1e9) return (v/1e9).toFixed(2)+'B PLS';
+  if (v>=1e6) return (v/1e6).toFixed(2)+'M PLS';
+  if (v>=1000) return (v/1000).toFixed(1)+'K PLS';
+  return v.toFixed(0)+' PLS';
 }
 function fmtNum(v) {
   if (!v||isNaN(v)) return '0';
   if (v>=1e9) return (v/1e9).toFixed(2)+'B';
   if (v>=1e6) return (v/1e6).toFixed(2)+'M';
-  if (v>=1000) return (v/1000).toFixed(2)+'K';
+  if (v>=1000) return (v/1000).toFixed(1)+'K';
   return v.toFixed(0);
 }
 function timeAgo(ts) {
@@ -243,519 +371,639 @@ function timeAgo(ts) {
   if (s<86400) return Math.floor(s/3600)+'h ago';
   return Math.floor(s/86400)+'d ago';
 }
-function shortAddr(a) { return a?a.slice(0,6)+'...'+a.slice(-4):''; }
+function shortAddr(a) { return a ? a.slice(0,6)+'...'+a.slice(-4) : ''; }
+function isLegit(addr) { return !!LEGIT[(addr||'').toLowerCase()]; }
 
-// ── Momentum score ──────────────────────────────────────────────────────────
-function getMomentum(tok) {
-  var score = 0;
+// ── RPC helpers ───────────────────────────────────────────────────────────────
+async function rpcCall(method, params) {
+  try {
+    var r = await fetch(RPC, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({jsonrpc:'2.0',id:1,method:method,params:params||[]})
+    });
+    var j = await r.json();
+    return j.result;
+  } catch(e) { return null; }
+}
+
+async function getBlock() {
+  var result = await rpcCall('eth_blockNumber');
+  return result ? parseInt(result, 16) : null;
+}
+
+async function getLogs(fromBlock, toBlock, addresses, topics) {
+  try {
+    var result = await rpcCall('eth_getLogs', [{
+      fromBlock: '0x'+fromBlock.toString(16),
+      toBlock:   '0x'+toBlock.toString(16),
+      address:   addresses,
+      topics:    topics
+    }]);
+    return result || [];
+  } catch(e) { return []; }
+}
+
+function decodeAddr(hex) {
+  return hex ? '0x'+hex.slice(-40) : null;
+}
+
+// ── DexScreener fetch ─────────────────────────────────────────────────────────
+async function dexSearch(q) {
+  try {
+    var r = await fetch(DEXSCR+'/search?q='+encodeURIComponent(q));
+    if (!r.ok) return [];
+    var j = await r.json();
+    return (j.pairs||[]).filter(function(p){return p.chainId==='pulsechain';});
+  } catch(e) { return []; }
+}
+
+async function dexTokens(addr) {
+  try {
+    var r = await fetch(DEXSCR+'/tokens/'+addr);
+    if (!r.ok) return [];
+    var j = await r.json();
+    return (j.pairs||[]).filter(function(p){return p.chainId==='pulsechain';});
+  } catch(e) { return []; }
+}
+
+// ── Momentum score ─────────────────────────────────────────────────────────────
+function momentum(tok) {
+  var s = 0;
   var ch24 = parseFloat(tok.priceChange&&tok.priceChange.h24||0);
   var ch1  = parseFloat(tok.priceChange&&tok.priceChange.h1||0);
   var vol  = parseFloat(tok.volume&&tok.volume.h24||0);
-  var liq  = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
-  var txns = (tok.txns&&tok.txns.h24) ? (tok.txns.h24.buys||0)+(tok.txns.h24.sells||0) : 0;
-
-  if (ch24 > 100) score += 3;
-  else if (ch24 > 50) score += 2;
-  else if (ch24 > 20) score += 1;
-
-  if (ch1 > 20) score += 2;
-  else if (ch1 > 10) score += 1;
-
-  if (vol > 100000) score += 2;
-  else if (vol > 10000) score += 1;
-
-  if (txns > 500) score += 2;
-  else if (txns > 100) score += 1;
-
-  // Buy/sell ratio
-  if (tok.txns&&tok.txns.h24) {
-    var buys = tok.txns.h24.buys||0;
-    var sells = tok.txns.h24.sells||0;
-    if (buys > sells*2) score += 2;
-    else if (buys > sells) score += 1;
-  }
-
-  return Math.min(score, 8);
+  var buys = tok.txns&&tok.txns.h24 ? tok.txns.h24.buys||0 : 0;
+  var sells= tok.txns&&tok.txns.h24 ? tok.txns.h24.sells||0 : 0;
+  if (ch24>100) s+=3; else if (ch24>50) s+=2; else if (ch24>20) s+=1;
+  if (ch1>20) s+=2; else if (ch1>10) s+=1;
+  if (vol>100000) s+=2; else if (vol>10000) s+=1;
+  if (buys>sells*2) s+=2; else if (buys>sells) s+=1;
+  return Math.min(s,8);
+}
+function momLabel(s) {
+  if (s>=7) return '🔥🔥🔥 Insane';
+  if (s>=5) return '🔥🔥 Hot';
+  if (s>=3) return '🔥 Warm';
+  return '❄️ Cold';
 }
 
-function momentumHtml(score) {
-  var fires = '';
-  if (score >= 7) fires = '🔥🔥🔥 Insane';
-  else if (score >= 5) fires = '🔥🔥 Hot';
-  else if (score >= 3) fires = '🔥 Warm';
-  else fires = '❄️ Cold';
-  return '<div class="momentum"><span class="mom-label">Momentum:</span><span>'+fires+'</span></div>';
-}
-
-// ── Rug indicators ──────────────────────────────────────────────────────────
-function rugIndicators(tok) {
-  var flags = [];
-  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
-  var vol = parseFloat(tok.volume&&tok.volume.h24||0);
-  var mc  = parseFloat(tok.marketCap||0);
-
-  if (liq < 1000) flags.push({label:'Low Liq', cls:'red'});
-  else if (liq < 10000) flags.push({label:'Med Liq', cls:'amber'});
-  else flags.push({label:'Good Liq', cls:'green'});
-
-  if (mc > 0 && liq > 0) {
-    var ratio = liq/mc;
-    if (ratio < 0.01) flags.push({label:'⚠ Liq/MC Low', cls:'red'});
-  }
-
-  if (tok.txns&&tok.txns.h24) {
-    var buys = tok.txns.h24.buys||0;
-    var sells = tok.txns.h24.sells||0;
-    if (sells > buys*3) flags.push({label:'⚠ Sell Pressure', cls:'red'});
-    else if (buys > sells*2) flags.push({label:'Buy Pressure', cls:'green'});
-  }
-
-  return flags;
-}
-
-// ── Graduation progress ─────────────────────────────────────────────────────
-// pump.tires graduates at 200M PLS ~ roughly $2200 USD at current prices
-function gradProgress(tok) {
-  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
-  // pump.tires graduates at 200M PLS bonding curve
-  // At ~$0.000011 per PLS that's ~$2200 USD
-  var target = 2200;
-  var pct = Math.min((liq/target)*100, 100);
-  return pct;
-}
-
-// ── Whale detection ─────────────────────────────────────────────────────────
-function whaleHtml(tok) {
-  // Check for large single transactions relative to market cap
-  var vol1h = parseFloat(tok.volume&&tok.volume.h1||0);
-  var txns1h = (tok.txns&&tok.txns.h1) ? (tok.txns.h1.buys||0) : 1;
-  var avgTx = txns1h > 0 ? vol1h/txns1h : 0;
-  var mc = parseFloat(tok.marketCap||0);
-
-  if (avgTx > 5000) {
-    return '<div class="whale-row"><span class="whale-icon">🐋</span><span>Large avg tx: '+fmt(avgTx)+' — whale activity detected</span></div>';
-  }
-  if (mc > 0 && vol1h > mc*0.1) {
-    return '<div class="whale-row"><span class="whale-icon">🐋</span><span>Volume >10% of market cap in 1h</span></div>';
-  }
-  return '';
-}
-
-// ── Is pump.tires token ─────────────────────────────────────────────────────
-function isPumpTires(tok) {
-  var baseAddr = (tok.baseToken&&tok.baseToken.address||'').toLowerCase();
-  var quoteAddr = (tok.quoteToken&&tok.quoteToken.address||'').toLowerCase();
-  var wpls = '0xa1077a294dde1b09bb078844df40758a5d0f9a27';
-  
-  // Never flag known legitimate tokens as pump.tires
-  if (KNOWN_LEGIT[baseAddr]) return false;
-  
-  // Must have WPLS as quote token AND low market cap (pump.tires signature)
-  var mc = parseFloat(tok.marketCap||0);
-  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
-  var dex = (tok.dexId||'').toLowerCase();
-  
-  // pump.tires tokens trade on pulsex but started on bonding curve
-  // They have WPLS as quote and typically small-mid market cap
-  if (quoteAddr === wpls && mc < 5000000 && !KNOWN_LEGIT[baseAddr]) return true;
-  
-  // Also check dexId for pump.tires specific dex
-  if (dex.includes('pump') || dex.includes('tire')) return true;
-  
-  return false;
-}
-
-// ── Is fake/copy token ───────────────────────────────────────────────────────
-function isFakeToken(tok) {
-  var baseAddr = (tok.baseToken&&tok.baseToken.address||'').toLowerCase();
-  var baseName = (tok.baseToken&&tok.baseToken.name||'').toLowerCase();
-  var baseSym  = (tok.baseToken&&tok.baseToken.symbol||'').toLowerCase();
-  
-  // Check if name/symbol matches a known legit token but address doesn't
-  for (var addr in KNOWN_LEGIT) {
-    var legit = KNOWN_LEGIT[addr];
-    var legitName = legit.name.toLowerCase();
-    var legitSym  = legit.sym.toLowerCase();
-    if ((baseName === legitName || baseSym === legitSym) && baseAddr !== addr) {
-      return true; // Same name/symbol, different address = fake!
-    }
+// ── Is fake token ──────────────────────────────────────────────────────────────
+function isFake(tok) {
+  var addr  = (tok.baseToken&&tok.baseToken.address||'').toLowerCase();
+  var name  = (tok.baseToken&&tok.baseToken.name||'').toLowerCase();
+  var sym   = (tok.baseToken&&tok.baseToken.symbol||'').toLowerCase();
+  if (isLegit(addr)) return false;
+  for (var a in LEGIT) {
+    var s = LEGIT[a].toLowerCase();
+    if (sym===s && addr!==a) return true;
   }
   return false;
 }
 
+// ── Is graduated pump.tires ────────────────────────────────────────────────────
 function isGraduated(tok) {
-  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
-  var age = tok.pairCreatedAt ? (Date.now() - tok.pairCreatedAt)/3600000 : 999;
-  var baseAddr = (tok.baseToken&&tok.baseToken.address||'').toLowerCase();
-  var dex = (tok.dexId||'').toLowerCase();
-  
-  // Must not be a known legit token
-  if (KNOWN_LEGIT[baseAddr]) return false;
-  
-  // Graduated pump.tires tokens:
-  // - Are on PulseX (pulsex dex)
-  // - Have WPLS as quote token
-  // - Have liquidity >= $1500 (past the 200M PLS graduation threshold)
-  // - Created within last 30 days (genuine new graduates)
-  // - Market cap < $10M (not an established token)
-  var mc = parseFloat(tok.marketCap||0);
-  var quoteAddr = (tok.quoteToken&&tok.quoteToken.address||'').toLowerCase();
-  var wpls = '0xa1077a294dde1b09bb078844df40758a5d0f9a27';
-  
-  return (
-    dex.includes('pulsex') &&
-    quoteAddr === wpls &&
-    liq >= 1500 &&
-    age < 720 && // within 30 days
-    (mc === 0 || mc < 10000000) &&
-    !KNOWN_LEGIT[baseAddr]
-  );
+  var addr  = (tok.baseToken&&tok.baseToken.address||'').toLowerCase();
+  var quote = (tok.quoteToken&&tok.quoteToken.address||'').toLowerCase();
+  var liq   = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  var mc    = parseFloat(tok.marketCap||0);
+  var dex   = (tok.dexId||'').toLowerCase();
+  if (isLegit(addr)) return false;
+  return quote===WPLS && liq>=1500 && (mc===0||mc<20000000) && dex.includes('pulsex');
 }
 
-// ── Render token card ───────────────────────────────────────────────────────
-function renderCard(tok) {
-  var base = tok.baseToken||{};
-  var sym = base.symbol||'???';
-  var name = base.name||sym;
+// ── Render token card ─────────────────────────────────────────────────────────
+function renderCard(tok, extra) {
+  extra = extra||{};
+  var base  = tok.baseToken||{};
+  var sym   = base.symbol||'???';
+  var name  = base.name||sym;
+  var addr  = (base.address||'').toLowerCase();
   var price = parseFloat(tok.priceUsd||0);
-  var ch24 = parseFloat(tok.priceChange&&tok.priceChange.h24||0);
-  var ch1  = parseFloat(tok.priceChange&&tok.priceChange.h1||0);
+  var ch24  = parseFloat(tok.priceChange&&tok.priceChange.h24||0);
+  var ch1   = parseFloat(tok.priceChange&&tok.priceChange.h1||0);
   var vol24 = parseFloat(tok.volume&&tok.volume.h24||0);
-  var liq = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
-  var mc = parseFloat(tok.marketCap||0);
-  var buys = (tok.txns&&tok.txns.h24&&tok.txns.h24.buys)||0;
-  var sells = (tok.txns&&tok.txns.h24&&tok.txns.h24.sells)||0;
-  var age = tok.pairCreatedAt ? timeAgo(tok.pairCreatedAt) : '?';
-  var momentum = getMomentum(tok);
-  var rugFlags = rugIndicators(tok);
-  var graduated = isGraduated(tok);
-  var cardCls = graduated ? 'graduated' : momentum >= 6 ? 'hot' : '';
-  var pumpTires = isPumpTires(tok);
-  var gradPct = pumpTires ? gradProgress(tok) : -1;
+  var liq   = parseFloat(tok.liquidity&&tok.liquidity.usd||0);
+  var mc    = parseFloat(tok.marketCap||0);
+  var buys  = tok.txns&&tok.txns.h24 ? tok.txns.h24.buys||0 : 0;
+  var sells = tok.txns&&tok.txns.h24 ? tok.txns.h24.sells||0 : 0;
+  var age   = tok.pairCreatedAt ? timeAgo(tok.pairCreatedAt) : '?';
+  var mom   = momentum(tok);
+  var fake  = isFake(tok);
+  var grad  = isGraduated(tok);
+  var logo  = tok.info&&tok.info.imageUrl;
+  var isNew = tok.pairCreatedAt && (Date.now()-tok.pairCreatedAt)<86400000;
 
-  // Logo
-  var logoHtml = tok.info&&tok.info.imageUrl
-    ? '<img src="'+tok.info.imageUrl+'" alt="'+sym+'" onerror="this.parentElement.textContent=\''+sym.slice(0,3)+'\'">'
-    : sym.slice(0,3);
+  var cardCls = fake?'fake':grad?'graduated':mom>=6?'hot':'';
 
   // Badges
   var badges = '';
-  if (tok._isFake) badges += '<span class="badge red">⚠️ FAKE/COPY</span>';
-  if (graduated) badges += '<span class="badge green">🎓 Grad</span>';
-  if (pumpTires && !tok._isFake) badges += '<span class="badge pulse">pump.tires</span>';
-  if (momentum >= 6) badges += '<span class="badge red">🔥 Hot</span>';
-  if (age.includes('m ago') || age.includes('s ago')) badges += '<span class="badge blue">🆕 New</span>';
+  if (fake) badges += '<span class="badge red">⚠️ FAKE</span>';
+  if (grad && !fake) badges += '<span class="badge green">🎓 Grad</span>';
+  if (extra.bonding) badges += '<span class="badge blue">⛽ Bonding</span>';
+  if (mom>=6 && !fake) badges += '<span class="badge red">🔥 Hot</span>';
+  if (isNew && !fake) badges += '<span class="badge pulse">🆕 New</span>';
 
-  // Graduation bar (pump.tires only, not yet graduated)
-  var gradBar = '';
-  if (pumpTires && !graduated && gradPct >= 0) {
-    var barColor = gradPct > 80 ? 'var(--green)' : gradPct > 50 ? 'var(--amber)' : 'var(--pulse)';
-    gradBar = '<div class="grad-bar-wrap"><div class="grad-bar-top"><span>Graduation Progress</span><span>'+gradPct.toFixed(1)+'%</span></div><div class="grad-bar-bg"><div class="grad-bar-fill" style="width:'+gradPct+'%;background:'+barColor+';"></div></div></div>';
+  // Bonding bar
+  var bondBar = '';
+  if (extra.bondPct !== undefined) {
+    var pct = extra.bondPct;
+    var bc  = pct>80?'var(--green)':pct>50?'var(--amber)':'var(--blue)';
+    bondBar = '<div class="bond-bar-wrap"><div class="bond-bar-top"><span>Bonding Curve Progress</span><span style="color:'+bc+'">'+pct.toFixed(1)+'%</span></div><div class="bond-bar-bg"><div class="bond-bar-fill" style="width:'+pct+'%;background:'+bc+';"></div></div></div>';
+    if (extra.plsRaised) bondBar += '<div style="font-size:10px;color:var(--muted);margin-bottom:8px;">'+fmtPLS(extra.plsRaised)+' raised of 200M PLS target</div>';
   }
-  if (graduated) {
-    gradBar = '<div class="grad-bar-wrap"><div class="grad-bar-top"><span style="color:var(--green)">✅ Graduated to PulseX!</span></div></div>';
+  if (grad) {
+    bondBar = '<div style="color:var(--green);font-size:11px;margin-bottom:8px;">✅ Graduated — liquidity locked on PulseX</div>';
   }
 
-  var html = '<div class="tok-card '+cardCls+' flash">';
-  html += '<div class="tok-header"><div class="tok-icon">'+logoHtml+'</div><div style="min-width:0;flex:1"><div class="tok-name">'+name+'</div><div class="tok-sym">$'+sym+' · '+age+'</div></div><div class="tok-badges">'+badges+'</div></div>';
-  html += '<div class="tok-price-row"><div class="tok-price">'+fmt(price)+'</div><div class="tok-change '+(ch24>=0?'up':'down')+'">'+(ch24>=0?'+':'')+ch24.toFixed(1)+'% 24h</div></div>';
-  html += '<div class="tok-stats">';
-  html += '<div class="ts-item"><div class="ts-label">Volume 24h</div><div class="ts-val">'+fmt(vol24)+'</div></div>';
-  html += '<div class="ts-item"><div class="ts-label">Liquidity</div><div class="ts-val">'+fmt(liq)+'</div></div>';
-  html += '<div class="ts-item"><div class="ts-label">Mkt Cap</div><div class="ts-val">'+(mc>0?fmt(mc):'—')+'</div></div>';
-  html += '<div class="ts-item"><div class="ts-label">Buys 24h</div><div class="ts-val" style="color:var(--green)">'+buys+'</div></div>';
-  html += '<div class="ts-item"><div class="ts-label">Sells 24h</div><div class="ts-val" style="color:var(--red)">'+sells+'</div></div>';
-  html += '<div class="ts-item"><div class="ts-label">1h Change</div><div class="ts-val '+(ch1>=0?'':'')+'">'+( ch1>=0?'+':'')+ch1.toFixed(1)+'%</div></div>';
-  html += '</div>';
-  html += gradBar;
-  html += momentumHtml(momentum);
-  html += whaleHtml(tok);
-  html += '<div class="tok-badges" style="margin-bottom:8px;">';
-  rugFlags.forEach(function(f){ html += '<span class="badge '+f.cls+'">'+f.label+'</span>'; });
-  html += '</div>';
-  html += '<div class="tok-links">';
-  html += '<a class="tok-link" href="https://dexscreener.com/pulsechain/'+tok.pairAddress+'" target="_blank">DexScreener ↗</a>';
-  html += '<a class="tok-link" href="https://scan.pulsechain.com/token/'+base.address+'" target="_blank">PulseScan ↗</a>';
-  if (pumpTires) html += '<a class="tok-link" href="https://pump.tires" target="_blank">pump.tires ↗</a>';
-  html += '</div>';
-  html += '</div>';
-  return html;
+  // Whale detection
+  var whale = '';
+  var vol1h = parseFloat(tok.volume&&tok.volume.h1||0);
+  var txns1h = tok.txns&&tok.txns.h1 ? (tok.txns.h1.buys||0) : 1;
+  var avgTx = txns1h>0 ? vol1h/txns1h : 0;
+  if (avgTx>5000) whale = '<div class="whale">🐋 Whale activity — avg tx '+fmt(avgTx)+'</div>';
+  else if (mc>0 && vol1h>mc*0.1) whale = '<div class="whale">🐋 Volume >10% market cap in 1h</div>';
+
+  // Rug flags
+  var rugFlags = '';
+  if (liq<1000) rugFlags += '<span class="badge red">Low Liq</span> ';
+  else if (liq<10000) rugFlags += '<span class="badge amber">Med Liq</span> ';
+  else rugFlags += '<span class="badge green">Good Liq</span> ';
+  if (sells>buys*3) rugFlags += '<span class="badge red">⚠ Sell Pressure</span>';
+  else if (buys>sells*2) rugFlags += '<span class="badge green">Buy Pressure</span>';
+
+  return '<div class="tok-card '+cardCls+'">' +
+    '<div class="tok-head">' +
+      '<div class="tok-logo">'+(logo?'<img src="'+logo+'" onerror="this.parentElement.textContent=\''+sym.slice(0,3)+'\'">':sym.slice(0,3))+'</div>' +
+      '<div class="tok-nameblock"><div class="tok-name">'+name+'</div><div class="tok-sym">$'+sym+' · '+age+'</div></div>' +
+    '</div>' +
+    '<div class="tok-badges" style="margin-bottom:8px;">'+badges+'</div>' +
+    '<div class="tok-price-row"><div class="tok-price">'+fmt(price)+'</div><div class="tok-chg '+(ch24>=0?'up':'dn')+'">'+(ch24>=0?'+':'')+ch24.toFixed(1)+'% 24h</div></div>' +
+    '<div class="tok-stats">' +
+      '<div><div class="ts-lbl">Vol 24h</div><div class="ts-val">'+fmt(vol24)+'</div></div>' +
+      '<div><div class="ts-lbl">Liquidity</div><div class="ts-val">'+fmt(liq)+'</div></div>' +
+      '<div><div class="ts-lbl">Mkt Cap</div><div class="ts-val">'+(mc>0?fmt(mc):'—')+'</div></div>' +
+      '<div><div class="ts-lbl">Buys 24h</div><div class="ts-val green">'+buys+'</div></div>' +
+      '<div><div class="ts-lbl">Sells 24h</div><div class="ts-val red">'+sells+'</div></div>' +
+      '<div><div class="ts-lbl">1h Change</div><div class="ts-val">'+(ch1>=0?'+':'')+ch1.toFixed(1)+'%</div></div>' +
+    '</div>' +
+    bondBar +
+    '<div class="momentum">Momentum: '+momLabel(mom)+'</div>' +
+    whale +
+    '<div class="tok-badges" style="margin-bottom:8px;">'+rugFlags+'</div>' +
+    '<div class="tok-links">' +
+      '<a class="tok-lnk" href="https://dexscreener.com/pulsechain/'+(tok.pairAddress||addr)+'" target="_blank">DexScreener ↗</a>' +
+      '<a class="tok-lnk" href="https://scan.pulsechain.com/token/'+base.address+'" target="_blank">PulseScan ↗</a>' +
+      (extra.bonding||grad?'<a class="tok-lnk" href="https://pump.tires" target="_blank">pump.tires ↗</a>':'') +
+    '</div>' +
+  '</div>';
 }
 
-// ── Fetch data ──────────────────────────────────────────────────────────────
-async function searchPairs(query) {
-  var tokens = [];
-  try {
-    var r = await fetch(DEXSCR+'/latest/dex/search?q='+encodeURIComponent(query));
-    if (r.ok) {
-      var j = await r.json();
-      (j.pairs||[]).filter(function(p){
-        return p.chainId==='pulsechain';
-      }).forEach(function(p){ tokens.push(p); });
+// ── Fetch bonding curve tokens from pump.tires contract ───────────────────────
+async function fetchBondingTokens() {
+  document.getElementById('bonding-grid').innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="spinner"></div><div class="state-title">Reading pump.tires blockchain events...</div></div>';
+
+  var latest = await getBlock();
+  if (!latest) { bondingTokens = []; renderBonding(); return; }
+
+  // TokenCreated event on pump.tires contract
+  // keccak256("TokenCreated(address,address,uint256,uint256,uint256,string,string,string)")
+  var TOKEN_CREATED = '0x9d239d29f68ef8f1dc2a15af407c01c71bdb677ca2df96a5bf9d7df94df04e77';
+
+  // Look back ~7 days of blocks (PulseChain ~10s blocks = ~60k blocks/week)
+  var fromBlock = Math.max(latest - 60000, 0);
+
+  var logs = await getLogs(fromBlock, latest, [PUMP_CONTRACT], [TOKEN_CREATED]);
+
+  // Also try Transfer events from pump.tires to find active tokens
+  if (!logs.length) {
+    // Fallback: search DexScreener for pump.tires tokens
+    var results = await Promise.all([
+      dexSearch('pump tires pulsechain'),
+      dexSearch('bonding curve PLS'),
+      dexTokens(PUMP_CONTRACT),
+    ]);
+
+    var seen = {};
+    var tokens = [];
+    results.forEach(function(arr){
+      arr.forEach(function(t){
+        var addr = (t.baseToken&&t.baseToken.address||'').toLowerCase();
+        var liq = parseFloat(t.liquidity&&t.liquidity.usd||0);
+        if (!seen[addr] && !isLegit(addr) && liq>10 && liq<2000) {
+          seen[addr]=true;
+          tokens.push(t);
+        }
+      });
+    });
+    bondingTokens = tokens;
+    renderBonding();
+    return;
+  }
+
+  // Process TokenCreated logs
+  var tokenAddrs = [];
+  logs.forEach(function(log) {
+    if (log.topics && log.topics[1]) {
+      var addr = decodeAddr(log.topics[1]);
+      if (addr && !isLegit(addr.toLowerCase())) tokenAddrs.push(addr);
     }
-  } catch(e) {}
-  return tokens;
-}
+  });
 
-async function fetchTokenPairs(address) {
+  // Get DexScreener data for these tokens
   var tokens = [];
-  try {
-    var r = await fetch(DEXSCR+'/latest/dex/tokens/'+address);
-    if (r.ok) {
-      var j = await r.json();
-      (j.pairs||[]).filter(function(p){
-        return p.chainId==='pulsechain';
-      }).forEach(function(p){ tokens.push(p); });
+  for (var i=0; i<Math.min(tokenAddrs.length,20); i++) {
+    var pairs = await dexTokens(tokenAddrs[i]);
+    if (pairs.length) {
+      var p = pairs[0];
+      var liq = parseFloat(p.liquidity&&p.liquidity.usd||0);
+      if (liq < 2500) { // Still bonding (not yet graduated)
+        tokens.push(p);
+      }
     }
-  } catch(e) {}
-  return tokens;
+  }
+  bondingTokens = tokens;
+  renderBonding();
 }
 
-async function fetchNewPairs() {
-  // Get tokens recently paired with WPLS on PulseX = new launches
+// ── Fetch graduated tokens ─────────────────────────────────────────────────────
+async function fetchGraduatedTokens() {
+  document.getElementById('graduated-grid').innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="spinner"></div><div class="state-title">Loading graduated tokens...</div></div>';
+
   var results = await Promise.all([
-    searchPairs('WPLS PulseX'),
-    searchPairs('meme pulsechain'),
-    searchPairs('pump tires pulsechain'),
+    dexSearch('WPLS PulseX new'),
+    dexSearch('pump tires graduated'),
+    dexSearch('meme pulsechain'),
+    dexSearch('degen PLS'),
   ]);
+
   var seen = {};
   var tokens = [];
   results.forEach(function(arr){
     arr.forEach(function(t){
-      if (!seen[t.pairAddress]) { seen[t.pairAddress]=true; tokens.push(t); }
-    });
-  });
-  return tokens;
-}
-
-async function fetchTrendingPairs() {
-  // Get trending on PulseChain by searching high volume terms
-  var results = await Promise.all([
-    searchPairs('PulseChain moon'),
-    searchPairs('PLS degen'),
-  ]);
-  var seen = {};
-  var tokens = [];
-  results.forEach(function(arr){
-    arr.forEach(function(t){
-      if (!seen[t.pairAddress]) { seen[t.pairAddress]=true; tokens.push(t); }
-    });
-  });
-  return tokens;
-}
-
-async function fetchRecentPairs() {
-  // Search for recently created pairs
-  var results = await Promise.all([
-    searchPairs('new pulsechain token'),
-    searchPairs('PulseChain launch'),
-  ]);
-  var seen = {};
-  var tokens = [];
-  results.forEach(function(arr){
-    arr.forEach(function(t){
-      if (!seen[t.pairAddress]) { seen[t.pairAddress]=true; tokens.push(t); }
-    });
-  });
-  return tokens;
-}
-
-async function fetchPumpTiresPairs() {
-  // Fetch PUMP token pairs first to get pump.tires ecosystem tokens
-  // PUMP token = 0xec4252e62c6de3d655ca9ce3afc12e553ebba274
-  var results = await Promise.all([
-    fetchTokenPairs('0xec4252e62c6de3d655ca9ce3afc12e553ebba274'),
-    searchPairs('pump tires'),
-    searchPairs('graduated pulsechain'),
-    searchPairs('bonding curve PLS'),
-  ]);
-  var seen = {};
-  var tokens = [];
-  results.forEach(function(arr){
-    arr.forEach(function(t){
-      if (!seen[t.pairAddress] && t.chainId==='pulsechain') {
-        seen[t.pairAddress]=true;
+      var addr = (t.baseToken&&t.baseToken.address||'').toLowerCase();
+      if (!seen[addr] && !isLegit(addr) && isGraduated(t)) {
+        seen[addr]=true;
         tokens.push(t);
       }
     });
   });
-  return tokens;
+
+  graduatedTokens = tokens;
+  renderGraduated();
 }
 
-// ── Main load ───────────────────────────────────────────────────────────────
-async function loadAll() {
-  document.getElementById('all-grid').innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="spinner"></div><div class="state-title">Scanning PulseChain launches...</div></div>';
+// ── Fetch all dex tokens ───────────────────────────────────────────────────────
+async function fetchAllTokens() {
+  document.getElementById('all-grid').innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="spinner"></div><div class="state-title">Loading all tokens...</div></div>';
 
-  try {
-    // Fetch from multiple sources in parallel
-    var results = await Promise.all([
-      fetchNewPairs(),
-      fetchTrendingPairs(),
-      fetchPumpTiresPairs(),
-    ]);
+  var results = await Promise.all([
+    dexSearch('PulseChain'),
+    dexSearch('WPLS'),
+    dexSearch('PLS meme'),
+    dexSearch('PulseX token'),
+  ]);
 
-    // Merge and dedupe by pair address
-    var seen = {};
-    var merged = [];
-    results.forEach(function(arr){
-      arr.forEach(function(tok){
-        var key = tok.pairAddress||tok.baseToken&&tok.baseToken.address;
-        if (key && !seen[key] && tok.chainId==='pulsechain') {
-          seen[key] = true;
-          merged.push(tok);
-        }
-      });
-    });
-
-    // Filter: only tokens with some activity, dedupe by BASE token address
-    var seenBase = {};
-    allTokens = merged.filter(function(t){
+  var seen = {};
+  var tokens = [];
+  results.forEach(function(arr){
+    arr.forEach(function(t){
+      var addr = (t.baseToken&&t.baseToken.address||'').toLowerCase();
       var liq = parseFloat(t.liquidity&&t.liquidity.usd||0);
-      if (liq < 100) return false;
-      
-      // Dedupe by base token address (keeps highest liquidity pair)
-      var baseAddr = (t.baseToken&&t.baseToken.address||'').toLowerCase();
-      if (seenBase[baseAddr]) {
-        var existing = seenBase[baseAddr];
-        var existLiq = parseFloat(existing.liquidity&&existing.liquidity.usd||0);
-        if (liq <= existLiq) return false;
-        // Remove the lower liquidity one
-        var idx = allTokens ? allTokens.indexOf(existing) : -1;
-        if (idx > -1) allTokens.splice(idx, 1);
+      if (!seen[addr] && liq>100) {
+        seen[addr]=true;
+        tokens.push(t);
       }
-      seenBase[baseAddr] = t;
-      return true;
     });
-    
-    // Tag fake tokens
-    allTokens.forEach(function(t){
-      t._isFake = isFakeToken(t);
-    });
-
-    // Sort by volume by default
-    sortTokens();
-    updateStats();
-    renderAll();
-
-    document.getElementById('stat-time').textContent = new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
-
-  } catch(e) {
-    document.getElementById('all-grid').innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="state-icon">⚠️</div><div class="state-title">Error loading data</div></div>';
-  }
-}
-
-// ── Sort ─────────────────────────────────────────────────────────────────────
-function sortTokens() {
-  allTokens.sort(function(a,b){
-    if (sortBy==='volume') return parseFloat(b.volume&&b.volume.h24||0)-parseFloat(a.volume&&a.volume.h24||0);
-    if (sortBy==='age') return (b.pairCreatedAt||0)-(a.pairCreatedAt||0);
-    if (sortBy==='change') return parseFloat(b.priceChange&&b.priceChange.h24||0)-parseFloat(a.priceChange&&a.priceChange.h24||0);
-    if (sortBy==='mcap') return parseFloat(b.marketCap||0)-parseFloat(a.marketCap||0);
-    if (sortBy==='grad') return gradProgress(b)-gradProgress(a);
-    return 0;
-  });
-}
-
-// ── Stats ─────────────────────────────────────────────────────────────────────
-function updateStats() {
-  var now = Date.now();
-  var oneDayAgo = now - 86400000;
-  var newToday = allTokens.filter(function(t){return t.pairCreatedAt && t.pairCreatedAt > oneDayAgo;}).length;
-  var graduated = allTokens.filter(function(t){return isGraduated(t);}).length;
-  var hot = allTokens.filter(function(t){return getMomentum(t)>=6;}).length;
-  var totalVol = allTokens.reduce(function(s,t){return s+parseFloat(t.volume&&t.volume.h24||0);},0);
-
-  document.getElementById('stat-new').textContent = newToday;
-  document.getElementById('stat-grad').textContent = graduated;
-  document.getElementById('stat-hot').textContent = hot;
-  document.getElementById('stat-vol').textContent = fmtNum(totalVol).replace('$','')+'';
-  document.getElementById('stat-vol').textContent = fmt(totalVol);
-}
-
-// ── Render ──────────────────────────────────────────────────────────────────
-function renderAll() {
-  var filtered = applyFilters(allTokens);
-
-  // Sections
-  var graduated = filtered.filter(function(t){return isGraduated(t);});
-  var hot = filtered.filter(function(t){return getMomentum(t)>=6&&!isGraduated(t);});
-  var now = Date.now();
-  var newTokens = filtered.filter(function(t){
-    var age = t.pairCreatedAt ? (now-t.pairCreatedAt)/3600000 : 999;
-    return age < 24 && !isGraduated(t) && getMomentum(t)<6;
   });
 
-  // Show/hide sections based on filter type
-  var showType = filters.type;
-
-  var gradSec = document.getElementById('grad-section');
-  var hotSec  = document.getElementById('hot-section');
-  var newSec  = document.getElementById('new-section');
-  var allSec  = document.getElementById('all-section');
-
-  if (showType==='all') {
-    gradSec.style.display = graduated.length ? 'block' : 'none';
-    hotSec.style.display  = hot.length ? 'block' : 'none';
-    newSec.style.display  = newTokens.length ? 'block' : 'none';
-    allSec.style.display  = 'block';
-    document.getElementById('grad-grid').innerHTML = graduated.map(renderCard).join('');
-    document.getElementById('hot-grid').innerHTML  = hot.map(renderCard).join('');
-    document.getElementById('new-grid').innerHTML  = newTokens.map(renderCard).join('');
-    document.getElementById('all-grid').innerHTML  = filtered.length ? filtered.map(renderCard).join('') : '<div class="state" style="grid-column:1/-1;"><div class="state-icon">🔍</div><div class="state-title">No tokens match filters</div></div>';
-  } else {
-    gradSec.style.display='none'; hotSec.style.display='none'; newSec.style.display='none';
-    allSec.style.display='block';
-    var subset = showType==='graduated' ? graduated : showType==='hot' ? hot : newTokens;
-    document.getElementById('all-grid').innerHTML = subset.length ? subset.map(renderCard).join('') : '<div class="state" style="grid-column:1/-1;"><div class="state-icon">🔍</div><div class="state-title">No tokens in this category</div></div>';
-  }
+  allDexTokens = tokens;
+  renderAll();
 }
 
-// ── Filters ──────────────────────────────────────────────────────────────────
-function applyFilters(tokens) {
-  var now = Date.now();
-  return tokens.filter(function(t){
-    // Age filter
-    if (filters.age !== 'all' && t.pairCreatedAt) {
-      var hours = (now - t.pairCreatedAt) / 3600000;
-      if (filters.age==='1h' && hours>1) return false;
-      if (filters.age==='6h' && hours>6) return false;
-      if (filters.age==='24h' && hours>24) return false;
+// ── Fetch TVL from DefiLlama ──────────────────────────────────────────────────
+async function fetchTVL() {
+  try {
+    var r = await fetch(LLAMA+'/v2/chains');
+    if (r.ok) {
+      var chains = await r.json();
+      var pulse = chains.find(function(c){return c.name==='Pulse'||c.gecko_id==='pulsechain';});
+      if (pulse) {
+        document.getElementById('cb-tvl').textContent = fmt(pulse.tvl);
+        document.getElementById('stat-tvl-total').textContent = fmt(pulse.tvl);
+      }
     }
-    // Search
-    if (searchTerm) {
-      var s = searchTerm.toLowerCase();
-      var sym = (t.baseToken&&t.baseToken.symbol||'').toLowerCase();
-      var name = (t.baseToken&&t.baseToken.name||'').toLowerCase();
-      if (!sym.includes(s) && !name.includes(s)) return false;
+
+    // Get protocol breakdown
+    var r2 = await fetch(LLAMA+'/protocols');
+    if (r2.ok) {
+      var protos = await r2.json();
+      var pulseProtos = protos.filter(function(p){
+        return p.chains && p.chains.some(function(c){return c.toLowerCase().includes('pulse');});
+      }).sort(function(a,b){return (b.tvl||0)-(a.tvl||0)}).slice(0,20);
+
+      document.getElementById('stat-tvl-protos').textContent = pulseProtos.length;
+
+      var pulsex = pulseProtos.find(function(p){return p.name&&p.name.toLowerCase().includes('pulsex');});
+      if (pulsex) document.getElementById('stat-tvl-pulsex').textContent = fmt(pulsex.tvl);
+
+      var totalTVL = pulseProtos.reduce(function(s,p){return s+(p.tvl||0);},0);
+      var tbody = document.getElementById('tvl-body');
+      tbody.innerHTML = pulseProtos.map(function(p,i){
+        var ch = p.change_1d||0;
+        var chCls = ch>=0?'green':'red';
+        return '<tr class="tvl-row"><td style="color:var(--muted);">'+(i+1)+'</td>' +
+          '<td><div class="tvl-name">'+p.name+'</div><div class="tvl-sub">'+(p.category||'')+'</div></td>' +
+          '<td style="color:var(--muted);font-size:12px;">'+(p.category||'—')+'</td>' +
+          '<td><span class="tvl-val">'+fmt(p.tvl||0)+'</span></td>' +
+          '<td><span class="tvl-chg" style="background:rgba('+(ch>=0?'34,197,94':'239,68,68')+',0.1);color:var(--'+(ch>=0?'green':'red')+')">'+(ch>=0?'+':'')+ch.toFixed(1)+'%</span></td>' +
+          '</tr>';
+      }).join('');
+
+      // Update change stat
+      var avgChange = pulseProtos.reduce(function(s,p){return s+(p.change_1d||0);},0)/pulseProtos.length;
+      var chEl = document.getElementById('stat-tvl-change');
+      chEl.textContent = (avgChange>=0?'+':'')+avgChange.toFixed(1)+'%';
+      chEl.className = 'scard-val '+(avgChange>=0?'green':'red');
+    }
+  } catch(e) {}
+}
+
+// ── Chain health ──────────────────────────────────────────────────────────────
+async function updateChainHealth() {
+  var block = await getBlock();
+  if (block) {
+    lastBlock = block;
+    document.getElementById('cb-block').textContent = block.toLocaleString();
+    document.getElementById('cb-time').textContent = new Date().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }
+
+  // PLS price via DexScreener
+  try {
+    var pairs = await dexTokens(WPLS);
+    if (pairs.length) {
+      var p = pairs[0];
+      var plsPrice = parseFloat(p.priceUsd||0);
+      document.getElementById('cb-pls').textContent = fmt(plsPrice);
+    }
+  } catch(e) {}
+
+  // Volume from PulseX search
+  try {
+    var px = await dexSearch('PulseX WPLS');
+    var totalVol = px.reduce(function(s,t){return s+parseFloat(t.volume&&t.volume.h24||0);},0);
+    document.getElementById('cb-vol').textContent = fmt(totalVol);
+  } catch(e) {}
+}
+
+// ── Live graduation watcher ───────────────────────────────────────────────────
+var watchedBlock = null;
+
+async function watchGraduations() {
+  var latest = await getBlock();
+  if (!latest) return;
+  if (!watchedBlock) { watchedBlock = latest - 100; }
+  if (latest <= watchedBlock) return;
+
+  var PAIR_CREATED = '0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9';
+  var from = Math.max(watchedBlock+1, latest-500);
+  var logs = await getLogs(from, latest, [PX_V1, PX_V2], [PAIR_CREATED]);
+  watchedBlock = latest;
+
+  logs.forEach(function(log) {
+    if (!log.topics||log.topics.length<3) return;
+    var t0 = decodeAddr(log.topics[1]);
+    var t1 = decodeAddr(log.topics[2]);
+    if (!t0||!t1) return;
+    var isWplsPair = t0.toLowerCase()===WPLS||t1.toLowerCase()===WPLS;
+    var newTok = t0.toLowerCase()===WPLS ? t1 : t0;
+    if (!isLegit(newTok.toLowerCase()) && isWplsPair) {
+      addFeedEvent({
+        icon:'🎓', type:'graduation',
+        title:'New Graduation!',
+        sub:'Token graduated from pump.tires to PulseX · '+shortAddr(newTok),
+        link:'https://dexscreener.com/pulsechain/'+newTok,
+        time: Date.now()
+      });
+      feedGrads++;
+      document.getElementById('stat-feed-grads').textContent = feedGrads;
+      showGradAlert(newTok);
+    }
+  });
+
+  // Watch pump.tires for new launches
+  var PUMP_EVT = '0x9d239d29f68ef8f1dc2a15af407c01c71bdb677ca2df96a5bf9d7df94df04e77';
+  var pumpLogs = await getLogs(from, latest, [PUMP_CONTRACT], [PUMP_EVT]);
+  pumpLogs.forEach(function(log) {
+    if (!log.topics||!log.topics[1]) return;
+    var addr = decodeAddr(log.topics[1]);
+    if (!addr) return;
+    addFeedEvent({
+      icon:'🆕', type:'launch',
+      title:'New pump.tires Launch',
+      sub:'Token created on bonding curve · '+shortAddr(addr),
+      link:'https://pump.tires',
+      time: Date.now()
+    });
+    feedLaunches++;
+    document.getElementById('stat-feed-launches').textContent = feedLaunches;
+    document.getElementById('cb-pump').textContent = feedLaunches;
+  });
+}
+
+function addFeedEvent(evt) {
+  feedEvents.unshift(evt);
+  feedEvents = feedEvents.slice(0, 100);
+  document.getElementById('cnt-feed').textContent = feedEvents.length;
+  document.getElementById('stat-feed-total').textContent = feedEvents.length;
+  renderFeed();
+}
+
+function showGradAlert(addr) {
+  var el = document.createElement('div');
+  el.className = 'grad-alert';
+  el.innerHTML = '<div class="grad-alert-title">🎓 New Graduation!</div>' +
+    '<div style="color:var(--sub);font-size:11px;font-family:Courier New,monospace;margin-bottom:8px;">'+shortAddr(addr)+'</div>' +
+    '<a href="https://dexscreener.com/pulsechain/'+addr+'" target="_blank" style="color:var(--pulse);font-size:11px;text-decoration:none;">View on DexScreener ↗</a>';
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove();}, 8000);
+}
+
+// ── Render functions ──────────────────────────────────────────────────────────
+function renderBonding() {
+  var tokens = bondingTokens.filter(function(t){
+    var s = searchTerms.bond.toLowerCase();
+    if (!s) return true;
+    return (t.baseToken&&t.baseToken.symbol||'').toLowerCase().includes(s) ||
+           (t.baseToken&&t.baseToken.name||'').toLowerCase().includes(s);
+  });
+
+  if (bondSortType==='progress') tokens.sort(function(a,b){
+    return parseFloat(b.liquidity&&b.liquidity.usd||0)-parseFloat(a.liquidity&&a.liquidity.usd||0);
+  });
+  else if (bondSortType==='newest') tokens.sort(function(a,b){return (b.pairCreatedAt||0)-(a.pairCreatedAt||0);});
+  else tokens.sort(function(a,b){return parseFloat(b.volume&&b.volume.h24||0)-parseFloat(a.volume&&a.volume.h24||0);});
+
+  document.getElementById('cnt-bonding').textContent = tokens.length;
+  document.getElementById('stat-bonding').textContent = tokens.length;
+
+  var nearGrad = tokens.filter(function(t){
+    var liq = parseFloat(t.liquidity&&t.liquidity.usd||0);
+    return liq > 1500;
+  }).length;
+  document.getElementById('stat-near-grad').textContent = nearGrad;
+
+  var avgProg = tokens.length ? tokens.reduce(function(s,t){
+    return s + Math.min(parseFloat(t.liquidity&&t.liquidity.usd||0)/2200*100, 100);
+  },0)/tokens.length : 0;
+  document.getElementById('stat-avg-prog').textContent = avgProg.toFixed(1)+'%';
+
+  var el = document.getElementById('bonding-grid');
+  if (!tokens.length) {
+    el.innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="state-icon">🔵</div><div class="state-title">No bonding curve tokens found</div><div style="font-size:12px;color:var(--muted);margin-top:8px;">pump.tires tokens will appear here once detected</div></div>';
+    return;
+  }
+  el.innerHTML = tokens.map(function(t){
+    var liq = parseFloat(t.liquidity&&t.liquidity.usd||0);
+    var pct = Math.min(liq/2200*100, 100);
+    var plsRaised = liq/0.000011; // rough PLS amount
+    return renderCard(t, {bonding:true, bondPct:pct, plsRaised:plsRaised});
+  }).join('');
+}
+
+function renderGraduated() {
+  var now = Date.now();
+  var tokens = graduatedTokens.filter(function(t){
+    var age = t.pairCreatedAt ? (now-t.pairCreatedAt)/3600000 : 9999;
+    if (gradFilterAge==='24h' && age>24) return false;
+    if (gradFilterAge==='7d' && age>168) return false;
+    var s = searchTerms.grad.toLowerCase();
+    if (s) {
+      return (t.baseToken&&t.baseToken.symbol||'').toLowerCase().includes(s) ||
+             (t.baseToken&&t.baseToken.name||'').toLowerCase().includes(s);
     }
     return true;
   });
+
+  if (gradSort==='volume') tokens.sort(function(a,b){return parseFloat(b.volume&&b.volume.h24||0)-parseFloat(a.volume&&a.volume.h24||0);});
+  else if (gradSort==='newest') tokens.sort(function(a,b){return (b.pairCreatedAt||0)-(a.pairCreatedAt||0);});
+  else if (gradSort==='change') tokens.sort(function(a,b){return parseFloat(b.priceChange&&b.priceChange.h24||0)-parseFloat(a.priceChange&&a.priceChange.h24||0);});
+  else tokens.sort(function(a,b){return parseFloat(b.marketCap||0)-parseFloat(a.marketCap||0);});
+
+  document.getElementById('cnt-graduated').textContent = tokens.length;
+  document.getElementById('stat-grad-total').textContent = tokens.length;
+
+  var today = tokens.filter(function(t){return t.pairCreatedAt&&(now-t.pairCreatedAt)<86400000;}).length;
+  var hot = tokens.filter(function(t){return momentum(t)>=6;}).length;
+  var vol = tokens.reduce(function(s,t){return s+parseFloat(t.volume&&t.volume.h24||0);},0);
+  document.getElementById('stat-grad-today').textContent = today;
+  document.getElementById('stat-grad-hot').textContent = hot;
+  document.getElementById('stat-grad-vol').textContent = fmt(vol);
+
+  var el = document.getElementById('graduated-grid');
+  if (!tokens.length) {
+    el.innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="state-icon">🎓</div><div class="state-title">No graduated tokens found</div></div>';
+    return;
+  }
+  el.innerHTML = tokens.map(function(t){return renderCard(t,{});}).join('');
 }
 
-function setFilter(type, val, el) {
-  filters[type] = val;
-  // Update button states for this row
-  el.parentElement.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active');});
+function renderAll() {
+  var tokens = allDexTokens.filter(function(t){
+    var addr = (t.baseToken&&t.baseToken.address||'').toLowerCase();
+    var mom = momentum(t);
+    var age = t.pairCreatedAt ? (Date.now()-t.pairCreatedAt)/3600000 : 9999;
+    if (allFilterType==='hot' && mom<6) return false;
+    if (allFilterType==='new' && age>24) return false;
+    if (allFilterType==='fake' && !isFake(t)) return false;
+    var s = searchTerms.all.toLowerCase();
+    if (s) {
+      return (t.baseToken&&t.baseToken.symbol||'').toLowerCase().includes(s) ||
+             (t.baseToken&&t.baseToken.name||'').toLowerCase().includes(s);
+    }
+    return true;
+  });
+
+  if (allSortType==='volume') tokens.sort(function(a,b){return parseFloat(b.volume&&b.volume.h24||0)-parseFloat(a.volume&&a.volume.h24||0);});
+  else if (allSortType==='newest') tokens.sort(function(a,b){return (b.pairCreatedAt||0)-(a.pairCreatedAt||0);});
+  else tokens.sort(function(a,b){return parseFloat(b.priceChange&&b.priceChange.h24||0)-parseFloat(a.priceChange&&a.priceChange.h24||0);});
+
+  document.getElementById('cnt-all').textContent = tokens.length;
+  var el = document.getElementById('all-grid');
+  if (!tokens.length) {
+    el.innerHTML = '<div class="state" style="grid-column:1/-1;"><div class="state-icon">🔍</div><div class="state-title">No tokens match filters</div></div>';
+    return;
+  }
+  el.innerHTML = tokens.map(function(t){return renderCard(t,{});}).join('');
+}
+
+function renderFeed() {
+  var el = document.getElementById('feed-list');
+  if (!feedEvents.length) {
+    el.innerHTML = '<div class="state"><div class="spinner"></div><div class="state-title">Watching for events...</div><div style="font-size:12px;color:var(--muted);margin-top:6px;">Checking every 30 seconds</div></div>';
+    return;
+  }
+  el.innerHTML = feedEvents.map(function(e){
+    return '<div class="feed-item">' +
+      '<div class="feed-icon">'+e.icon+'</div>' +
+      '<div class="feed-info"><div class="feed-title">'+e.title+'</div><div class="feed-sub">'+e.sub+'</div></div>' +
+      '<div class="feed-right">' +
+        (e.link?'<div><a href="'+e.link+'" target="_blank" style="color:var(--pulse);font-size:11px;text-decoration:none;">View ↗</a></div>':'') +
+        '<div class="feed-time">'+timeAgo(e.time)+'</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Filter / sort handlers ────────────────────────────────────────────────────
+function setBondSort(v,el) { bondSortType=v; toggleActive(el); renderBonding(); }
+function setGradSort(v,el) { gradSort=v; toggleActive(el); renderGraduated(); }
+function setGradFilter(k,v,el) { gradFilterAge=v; toggleActive(el); renderGraduated(); }
+function setAllFilter(v,el) { allFilterType=v; toggleActive(el); renderAll(); }
+function setAllSort(v,el) { allSortType=v; toggleActive(el); renderAll(); }
+function filterBonding(v) { searchTerms.bond=v; renderBonding(); }
+function filterGraduated(v) { searchTerms.grad=v; renderGraduated(); }
+function filterAll(v) { searchTerms.all=v; renderAll(); }
+
+function toggleActive(el) {
+  var parent = el.parentElement;
+  parent.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active');});
   el.classList.add('active');
-  renderAll();
 }
 
-function setSort(val, el) {
-  sortBy = val;
-  document.querySelectorAll('.filter-row:last-child .fbtn').forEach(function(b){b.classList.remove('active');});
-  el.classList.add('active');
-  sortTokens();
-  renderAll();
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(name) {
+  var tabs = ['bonding','graduated','all','feed','tvl'];
+  document.querySelectorAll('.mtab').forEach(function(t,i){t.classList.toggle('active',tabs[i]===name);});
+  document.querySelectorAll('.mpanel').forEach(function(p){p.classList.toggle('active',p.id==='panel-'+name);});
 }
 
-function doSearch(val) {
-  searchTerm = val.trim();
-  renderAll();
+// ── Main init ─────────────────────────────────────────────────────────────────
+async function refreshAll() {
+  await Promise.all([
+    updateChainHealth(),
+    fetchBondingTokens(),
+    fetchGraduatedTokens(),
+    fetchAllTokens(),
+    fetchTVL(),
+  ]);
 }
 
-// ── Auto refresh every 60s ───────────────────────────────────────────────────
-loadAll();
-setInterval(loadAll, 60000);
+// Initial load
+refreshAll();
+
+// Poll chain every 30s for graduations + health
+setInterval(watchGraduations, 30000);
+setInterval(updateChainHealth, 30000);
+
+// Refresh data every 2 minutes
+setInterval(function(){
+  fetchBondingTokens();
+  fetchGraduatedTokens();
+  fetchAllTokens();
+}, 120000);
+
+// Start watching immediately
+setTimeout(watchGraduations, 3000);
 </script>
 </body>
 </html>
